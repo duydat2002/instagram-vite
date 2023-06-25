@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useModalStore } from '@/store'
 
+const route = useRoute()
 const { stopScroll } = storeToRefs(useModalStore())
+
 const darkMode = ref(false)
 
 watch(darkMode, (newMode) => {
@@ -32,6 +34,8 @@ watch(darkMode, (newMode) => {
       </div>
     </div>
 
-    <RouterView v-else />
+    <Component v-else :is="route.meta.layout || 'div'">
+      <RouterView />
+    </Component>
   </div>
 </template>

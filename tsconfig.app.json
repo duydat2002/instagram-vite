@@ -7,7 +7,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "#/*": ["./src/types/*"],
       "firebase/*": ["./node_modules/firebase/*"]
     },
     "skipLibCheck": true,

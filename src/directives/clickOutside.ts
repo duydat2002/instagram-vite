@@ -2,15 +2,15 @@ import type { Directive, DirectiveBinding } from 'vue'
 import type { IPoint } from '@/types'
 
 interface ExtendHTMLElement extends HTMLElement {
-  _mouseDownEvent?: (event: MouseEvent) => void
-  _mouseUpEvent?: (event: MouseEvent) => void
-  _clickEvent?: (event: MouseEvent) => void
+  _mouseDownEvent?: Fn<MouseEvent, void>
+  _mouseUpEvent?: Fn<MouseEvent, void>
+  _clickEvent?: Fn<MouseEvent, void>
 }
 
 export const ClickOuside: Directive = {
   mounted(el: ExtendHTMLElement, binding: DirectiveBinding) {
     if (!binding.modifiers.short) {
-      let mouseDownPosition: IPoint | null = null
+      let mouseDownPosition: Nullable<IPoint> = null
 
       el._mouseDownEvent = (event: MouseEvent) => {
         if (!(el === event.target || el.contains(event.target as Node))) {

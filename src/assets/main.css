@@ -1,3 +1,150 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@font-face {
+  font-family: 'Segoe UI';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Segoe UI'), url('@/assets/fonts/Segoe UI.woff') format('woff');
+}
+
+:root {
+  /* Color */
+  --primary-bg-color: #ffffff;
+  --secondary-bg-color: rgb(250, 250, 250);
+
+  --primary-text-color: #000000;
+  --secondary-text-color: rgb(115, 115, 115);
+
+  --link-color: rgb(0, 55, 107);
+  --error-color: rgb(237, 73, 86);
+  --separator-color: rgb(244, 244, 244);
+  --separator-modal-color: rgb(219, 219, 219);
+  --hover-color: rgb(242, 242, 242);
+  --modal-color: rgb(255, 255, 255);
+
+  --skeleton-bg-color: rgb(240, 240, 240);
+
+  --border-color: rgb(219, 219, 219);
+  --border-dark-color: rgb(168, 168, 168);
+  --border-super-dark-color: rgb(38, 38, 38);
+
+  --track-color: rgb(219, 219, 219);
+  --active-track-color: rgb(38, 38, 38);
+  --thumb-color: #000;
+
+  --primary-button-color: rgb(0, 149, 246);
+  --primary-button-hover-color: rgb(24, 119, 242);
+  --secondary-button-color: rgb(239, 239, 239);
+  --secondary-button-hover-color: rgb(219, 219, 219);
+
+  --placeholder-color: rgb(199, 199, 199);
+
+  --gradient-lavender: 211, 0, 197;
+  --gradient-orange: 255, 122, 0;
+  --gradient-pink: 255, 1, 105;
+  --gradient-purple: 118, 56, 250;
+  --gradient-red: 255, 48, 64;
+  --gradient-yellow: 255, 214, 0;
+
+  /* Width */
+  --feed-sidebar-width: 319px;
+
+  /* Nav width */
+  --nav-narrow-width: 72px;
+  --nav-medium-width: 244px;
+
+  /* More modal width */
+  --more-modal-width: 266px;
+
+  /* Post info */
+  --post-info-width: 335px;
+}
+
+:root.dark {
+  --primary-bg-color: #000;
+  --secondary-bg-color: #fafafa;
+
+  --primary-text-color: #fff;
+  --secondary-text-color: #737373;
+
+  --link-color: #e0f1ff;
+  --error-color: #ed4956;
+  --separator-color: #5555554d;
+  --hover-color: #ffffff1a;
+  --modal-color: #262626;
+
+  --separator-modal-color: #363636;
+
+  --border-color: #262626;
+  --border-dark-color: #a8a8a8;
+  --border-super-dark-color: #262626;
+
+  --track-color: #363636;
+  --active-track-color: #e0f1ff;
+  --thumb-color: #fff;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--primary-text-color);
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+input,
+textarea,
+button {
+  outline: none !important;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.no-scrollbar::-moz-scrollbar {
+  display: none !important;
+}
+
+.separator-big {
+  width: 100%;
+  height: 6px;
+}
+
+.separator-small {
+  width: 100%;
+  height: 1px;
+}

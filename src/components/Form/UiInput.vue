@@ -64,7 +64,7 @@ const blurInput = () => {
         @blur="blurInput"
       />
       <span
-        class="placeholder absolute left-2 top-1/2 -translate-y-1/2 origin-top-left text-xs text-textColor-secondary transition-transform duration-100 ease-out pointer-events-none"
+        class="placeholder absolute ml-2 left-0 right-0 top-1/2 -translate-y-1/2 origin-top-left text-xs truncate text-left text-textColor-secondary transition-transform duration-100 ease-out pointer-events-none"
         >{{ placeholder }}</span
       >
     </div>

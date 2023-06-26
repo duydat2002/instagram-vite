@@ -1,0 +1,23 @@
+max-[a] => a - ~
+min-[a] => 0 - a
+
+
+Menu:
+1264 - ~: medium
+768 - 1263: narrow
+0 - 767: bottom
+
+Header: 
+768 - ~: hide
+
+SidebarRight:
+1160 - ~: show
+
+HomePage 
+-> Main:
+max-width: 630
+-> Auth -> phone-home: 
+876 - ~: show
+-> Auth -> form:
+450 - ~: full
+

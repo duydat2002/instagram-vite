@@ -36,6 +36,9 @@ const props = defineProps({
     validator: (value: string) => {
       return ['small', 'medium', 'large'].includes(value)
     }
+  },
+  classProps: {
+    type: Object as PropType<string[] | string>
   }
 })
 
@@ -47,7 +50,7 @@ const classes = computed(() => {
 <template>
   <button
     class="relative w-full font-semibold select-none disabled:opacity-60 disabled:pointer-events-none"
-    :class="classes"
+    :class="[classes, classProps]"
     :style="{ color, backgroundColor }"
     :type="type"
     :disabled="isDisabled"

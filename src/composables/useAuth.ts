@@ -11,10 +11,7 @@ export const useAuth = () => {
     authError.value = null
 
     try {
-      let user = null
-
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      user = userCredential.user
 
       const userData = {
         email,
@@ -25,10 +22,10 @@ export const useAuth = () => {
         insight: { followersCount: 0, followingCount: 0, postsCount: 0 }
       }
 
-      await setDoc(doc(db, 'users', user.uid), userData)
+      await setDoc(doc(db, 'users', userCredential.user.uid), userData)
 
       return {
-        id: user.uid,
+        id: userCredential.user.uid,
         ...userData
       } as IUser
     } catch (error: any) {

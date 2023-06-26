@@ -1,0 +1,34 @@
+// Firestore
+
+Users(id, username, email, fullname, avatar, bio, insight{followersCount, followingCount, postsCount}, isPrivate*, newsPosts*)
+
+Highlights(id, userId, title, stories[id])
+
+  x  Insights(id, userId, followersCount, followingCount, postsCount)
+
+Stories(id, userId, content, likesCount, created_at)
+
+Posts(id, userId, type{image, video, reel, multiple}, tags[id], caption, content(img/ vid), likesCount, commentCount, comments[id], created_at)
+
+Comments(id, postId, storyId, content, likesCount, replies{replyId, userId, content, likesCount, created_at}, created_at)
+
+Likes(id, userId, postId, storyId, commentId, replyId, created_at)
+
+Messages(id, senderId, receiverId, content, created_at)
+
+Followers(id, followerId(Người theo dõi), followingId(Người được theo dõi), created_at)
+
+Notifications(id, userId, type[like, comment, follow], postId, senderId, read, created_at)
+
+Saved(id, userID, postId[], created_at)
+
+Explores(id, userId, postId[])
+
+
+// Storage
+
+- defaultAvatar.jpg
+- userId:
+  + avatar:
+  + posts:
+  + stories:

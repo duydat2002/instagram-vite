@@ -24,9 +24,9 @@ onBeforeUnmount(() => {
     <!-- Home -->
     <div v-if="false">home</div>
     <!-- Login -->
-    <div v-else class="mt-8">
+    <div v-else class="w-full my-8 max-[450px]:my-0">
       <div class="flex justify-center items-center">
-        <div class="home-phone flex mr-8 mb-3">
+        <div class="home-phone min-[876px]:flex hidden mr-8 mb-3">
           <div class="relative w-full mt-[27px] mr-[21px]">
             <img
               class="screenshot absolute top-0 right-0 opacity-0"
@@ -54,9 +54,7 @@ onBeforeUnmount(() => {
             />
           </div>
         </div>
-        <div class="">
-          <Login />
-        </div>
+        <Login />
       </div>
     </div>
   </div>

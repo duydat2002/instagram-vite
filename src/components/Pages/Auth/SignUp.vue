@@ -112,8 +112,10 @@ const handleCheckPassword = () => {
 </script>
 
 <template>
-  <div class="w-[350px] flex flex-col mt-3">
-    <div class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor">
+  <div class="w-[350px] flex flex-col mt-3 max-[450px]:mt-0 max-[450px]:w-full">
+    <div
+      class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor max-[450px]:px-4 max-[450px]:border-none"
+    >
       <RouterLink to="/" class="w-[175px] mt-[26px] mb-4">
         <LogoText />
       </RouterLink>
@@ -124,12 +126,10 @@ const handleCheckPassword = () => {
       </h2>
       <form id="signupForm" class="w-full text-center mb-[18px]" @submit.prevent="submitSignupForm">
         <UiButton variant="contained" primary class="mb-[18px]">
-          <div class="flex w-full items-baseline justify-center">
-            <div class="w-[18px] h-[18px] mr-2">
-              <fa class="w-full h-full" :icon="['fab', 'square-facebook']" style="color: #ffffff" />
-            </div>
-            <span>Đăng nhập bằng Facebook</span>
+          <div class="w-[18px] h-[18px] mr-2 inline-block">
+            <fa class="w-full h-full" :icon="['fab', 'square-facebook']" style="color: #ffffff" />
           </div>
+          <span>Đăng nhập bằng Facebook</span>
         </UiButton>
         <div class="flex items-center mb-5">
           <div class="separator-small bg-borderColor"></div>
@@ -194,7 +194,9 @@ const handleCheckPassword = () => {
         </p>
       </form>
     </div>
-    <div class="p-[25px] my-[10px] text-center border rounded-sm border-borderColor">
+    <div
+      class="p-[25px] my-[10px] text-center border rounded-sm border-borderColor max-[450px]:border-none"
+    >
       <span class="">Bạn có tài khoản? </span>
       <RouterLink to="/accounts/login" class="font-semibold text-buttonColor-primary"
         >Đăng nhập</RouterLink
@@ -202,7 +204,7 @@ const handleCheckPassword = () => {
     </div>
     <div class="mt-[10px] text-center">
       <p class="text-sm my-[10px]">Tải ứng dụng.</p>
-      <div class="flex my-[10px] items-center justify-center gap-2">
+      <div class="flex my-[10px] flex-wrap items-center justify-center gap-2">
         <RouterLink to="/" class="h-10">
           <img
             class="h-full"

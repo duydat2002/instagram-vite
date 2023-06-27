@@ -8,10 +8,10 @@ interface ILanguage {
 }
 
 const footerLinks = ref([
-  { path: '/', name: 'Meta' },
+  { path: '/123', name: 'Meta' },
   { path: '/', name: 'Giới thiệu' },
-  { path: '/', name: 'Blog' },
-  { path: '/', name: 'Việc làm' },
+  { path: '/accounts/signup', name: 'Blog' },
+  { path: '/accounts/login', name: 'Việc làm' },
   { path: '/', name: 'Trợ giúp' },
   { path: '/', name: 'API' },
   { path: '/', name: 'Quyền riêng tư' },

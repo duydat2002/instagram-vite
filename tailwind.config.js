@@ -57,6 +57,10 @@ module.exports = {
       width: {
         'nav-narrow': 'var(--nav-narrow-width)',
         'nav-medium': 'var(--nav-medium-width)'
+      },
+      spacing: {
+        'nav-narrow': 'var(--nav-narrow-width)',
+        'nav-medium': 'var(--nav-medium-width)'
       }
     }
   },

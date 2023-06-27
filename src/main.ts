@@ -14,7 +14,7 @@ const app = createApp(App)
 app.component('fa', FontAwesomeIcon)
 app.directive('click-outside', ClickOuside)
 
-app.use(createPinia())
 app.use(router)
+app.use(createPinia())
 
 app.mount('#app')

@@ -15,10 +15,10 @@ export const useUserStore = defineStore('user', {
     currentUser: null //Người dùng đang đăng nhập
   }),
   actions: {
-    setUser(user: IUser) {
+    setUser(user: Nullable<IUser>) {
       this.user = user
     },
-    setCurrentUser(currentUser: IUser) {
+    setCurrentUser(currentUser: Nullable<IUser>) {
       this.currentUser = currentUser
     },
     updateUser(payload: any) {

@@ -38,7 +38,7 @@ const props = defineProps({
     }
   },
   classProps: {
-    type: Object as PropType<string[] | string>
+    type: String as PropType<string[] | string>
   }
 })
 

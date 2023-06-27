@@ -4,10 +4,11 @@ import UiInput from '@/components/Form/UiInput.vue'
 import LogoText from '@/assets/icons/logo-text.svg'
 
 import { ref, computed } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store'
 import { useAuth } from '@/composables/useAuth'
 
+const route = useRoute()
 const router = useRouter()
 
 const username = ref('')
@@ -30,7 +31,8 @@ const submitLoginForm = async () => {
   if (user) {
     setCurrentUser(user)
     authError.value = null
-    router.push('/')
+    if (route.path != '/') router.push('/')
+    else router.go(0)
   } else {
     authError.value = 'Rất tiếc, mật khẩu của bạn không đúng. Vui lòng kiểm tra lại mật khẩu.'
   }

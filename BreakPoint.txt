@@ -1,5 +1,5 @@
-max-[a] => a - ~
-min-[a] => 0 - a
+max-[a] => 0 - a
+min-[a] => a - ~
 
 
 Menu:

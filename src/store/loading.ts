@@ -2,15 +2,14 @@ import { defineStore } from 'pinia'
 
 export const useLoadingStore = defineStore('loading', {
   state: () => ({
-    isLoading: true,
-    isLoadingOnReload: false
+    isLoadingProgress: true
   }),
   actions: {
-    setIsLoading(isLoading: boolean) {
-      this.isLoading = isLoading
+    startLoading() {
+      this.isLoadingProgress = true
     },
-    setIsLoadingOnReload(isLoadingOnReload: boolean) {
-      this.isLoadingOnReload = isLoadingOnReload
+    stopLoading() {
+      this.isLoadingProgress = false
     }
   }
 })

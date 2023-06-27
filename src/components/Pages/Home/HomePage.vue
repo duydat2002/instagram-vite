@@ -8,6 +8,7 @@ const logout = async () => {
   await signOut(auth)
   const { setCurrentUser } = useUserStore()
   setCurrentUser(null)
+  router.go(0)
 }
 
 const show = () => {

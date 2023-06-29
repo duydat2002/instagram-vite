@@ -1,22 +1,25 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import router from './router'
-
+import { createApp, type App as AppType } from 'vue'
+import { createPinia } from 'pinia'
 import { FontAwesomeIcon } from '@/libs/fontAwesome'
 import { ClickOuside } from '@/directives'
-import Icon from '@/helpers/Icon.vue'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/firebase'
 
-const app = createApp(App)
+let app: AppType<Element> | null = null
 
-app.component('fa', FontAwesomeIcon)
-app.component('icon', Icon)
-app.directive('click-outside', ClickOuside)
+onAuthStateChanged(auth, async () => {
+  if (!app) {
+    app = createApp(App)
+    app.component('fa', FontAwesomeIcon)
+    app.directive('click-outside', ClickOuside)
 
-app.use(router)
-app.use(createPinia())
+    app.use(createPinia())
+    app.use(router)
 
-app.mount('#app')
+    app.mount('#app')
+  }
+})

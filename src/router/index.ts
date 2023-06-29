@@ -2,7 +2,7 @@ import routes from './routes'
 import { createRouter, createWebHistory } from 'vue-router'
 import { nextTick } from 'vue'
 
-import { useLoadingStore, useUserStore } from '@/store'
+import { useLoadingStore } from '@/store'
 import { auth } from '@/firebase'
 
 const router = createRouter({
@@ -21,13 +21,7 @@ const authPath = ['/accounts/login', '/accounts/signup']
 
 router.beforeEach(async (to, from) => {
   const { startLoading } = useLoadingStore()
-  const { currentUser } = useUserStore()
   startLoading()
-
-  console.log('path', to.path)
-  console.log('auth', authPath.includes(to.path))
-  console.log('auth.currentUser', auth.currentUser)
-  console.log('currentUser', currentUser)
 
   if (to.meta.requiresAuth && !auth.currentUser) {
     return '/accounts/login'

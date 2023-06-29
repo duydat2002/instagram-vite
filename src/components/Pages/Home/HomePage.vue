@@ -5,8 +5,8 @@ import { useUserStore } from '@/store'
 import { useRouter } from 'vue-router'
 
 const logout = async () => {
-  await signOut(auth)
   const { setCurrentUser } = useUserStore()
+  await signOut(auth)
   setCurrentUser(null)
   router.go(0)
 }

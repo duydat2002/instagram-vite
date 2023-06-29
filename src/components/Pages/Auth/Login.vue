@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import UiButton from '@/components/Form/UiButton.vue'
 import UiInput from '@/components/Form/UiInput.vue'
+import LogoText from '@icons/logo-text.svg'
 
 import { ref, computed } from 'vue'
 import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store'
-import { useAuth } from '@/composables/useAuth'
+import { useAuth } from '@/composables'
 
 const route = useRoute()
 const router = useRouter()
@@ -47,7 +48,7 @@ const submitLoginForm = async () => {
       class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor max-[450px]:px-4 max-[450px]:border-none"
     >
       <RouterLink to="/" class="w-[175px] mt-[26px] mb-10">
-        <icon name="logo-text" />
+        <LogoText />
       </RouterLink>
       <form id="loginForm" class="w-full text-center" @submit.prevent="submitLoginForm">
         <UiInput

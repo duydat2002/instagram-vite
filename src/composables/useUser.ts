@@ -38,7 +38,8 @@ export const useUser = () => {
   }
 
   const getCurrentUser = async () => {
-    return await getUser(auth.currentUser!.uid)
+    if (auth.currentUser) return await getUser(auth.currentUser!.uid)
+    else return null
   }
 
   const watchUserChange = (userId: string) => {

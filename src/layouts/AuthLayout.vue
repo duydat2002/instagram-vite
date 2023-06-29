@@ -3,7 +3,7 @@ import Footer from '@/components/Layout/Footer.vue'
 </script>
 
 <template>
-  <section class="flex flex-col min-h-screen">
+  <section class="auth flex flex-col min-h-screen">
     <main class="flex flex-grow w-full justify-center">
       <slot />
     </main>

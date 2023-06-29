@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
-import { auth } from '@/firebase/'
-import { onAuthStateChanged } from 'firebase/auth'
-import { useUser } from '@/composables/useUser'
+import { useUser } from '@/composables'
 import type { IUser } from '@/types'
 
 interface IState {
@@ -29,14 +27,8 @@ export const useUserStore = defineStore('user', {
     },
     async initCurrentUser() {
       const { getCurrentUser } = useUser()
-      if (auth.currentUser) this.currentUser = await getCurrentUser()
-      await onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          this.currentUser = await getCurrentUser()
-        } else {
-          this.currentUser = null
-        }
-      })
+
+      this.currentUser = await getCurrentUser()
     }
   }
 })

@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 import UiButton from '@/components/Form/UiButton.vue'
 import UiInput from '@/components/Form/UiInput.vue'
+import LogoText from '@icons/logo-text.svg'
 
 import { ref, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { useAuth } from '@/composables/useAuth'
-import { useCheck } from '@/composables/useCheck'
-import { useUser } from '@/composables/useUser'
+import { useAuth, useCheck, useUser } from '@/composables'
 
 const router = useRouter()
 
@@ -116,7 +115,7 @@ const handleCheckPassword = () => {
       class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor max-[450px]:px-4 max-[450px]:border-none"
     >
       <RouterLink to="/" class="w-[175px] mt-[26px] mb-4">
-        <icon name="logo-text" />
+        <LogoText />
       </RouterLink>
       <h2
         class="text-[17px] leading-5 font-semibold text-center text-textColor-secondary mb-[18px]"

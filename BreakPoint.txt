@@ -2,7 +2,7 @@ max-[a] => 0 - a
 min-[a] => a - ~
 
 
-Menu:
+Nav:
 1264 - ~: medium
 768 - 1263: narrow
 0 - 767: bottom

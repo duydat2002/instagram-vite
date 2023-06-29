@@ -1,19 +1,43 @@
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
+import { useUserStore } from '@/store'
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 export default [
   {
     path: '/',
     name: 'Home',
     component: () => import('@/views/home.vue'),
-    meta: { title: 'Instagram', layout: BlankLayout }
+    meta: { title: 'Instagram' },
+    beforeEnter: async (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalized,
+      next: NavigationGuardNext
+    ) => {
+      const userStore = useUserStore()
+
+      await userStore.initCurrentUser()
+
+      console.log(userStore.currentUser)
+
+      if (userStore.currentUser) to.meta.layout = DashboardLayout
+      else to.meta.layout = AuthLayout
+
+      next()
+    }
   },
   {
     path: '/:username',
     name: 'Profile',
     component: () => import('@/views/profile/index.vue'),
-    meta: { title: 'Instagram', requiresAuth: true }
+    meta: { title: 'Instagram', layout: DashboardLayout, requiresAuth: true }
+  },
+  {
+    path: '/explore',
+    name: 'Explore',
+    component: () => import('@/views/explore.vue'),
+    meta: { layout: DashboardLayout, requiresAuth: true }
   },
   {
     path: '/accounts/login',

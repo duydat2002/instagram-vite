@@ -34,7 +34,7 @@ export default [
       {
         path: 'posts',
         name: 'Posts',
-        component: () => import('../views/Profile/posts.vue')
+        component: () => import('../views/profile/posts.vue')
       }
     ]
   },

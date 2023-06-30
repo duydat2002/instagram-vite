@@ -12,6 +12,8 @@ import Heart from '@icons/heart.svg'
 import HeartActive from '@icons/heart-active.svg'
 import Plus from '@icons/plus-square.svg'
 import PlusActive from '@icons/plus-square-active.svg'
+import Bar from '@icons/bar.svg'
+import BarActive from '@icons/bar-active.svg'
 
 export enum NavTabEnum {
   Home = 'Home',
@@ -25,38 +27,67 @@ export enum NavTabEnum {
   Bar = 'Bar'
 }
 
-export const NAVS = [
-  { icon: Home, iconActive: HomeActive, title: 'Trang chủ', tab: NavTabEnum.Home, path: '/' },
+export interface Nav {
+  name: NavTabEnum
+  title: string
+  path: string
+  icon?: string
+  iconActive?: string
+  hideMobie?: boolean
+}
+
+export const NAVS: Nav[] = [
+  { icon: Home, iconActive: HomeActive, title: 'Trang chủ', name: NavTabEnum.Home, path: '/' },
   {
     icon: Search,
     iconActive: SearchActive,
     title: 'Tìm kiếm',
-    tab: NavTabEnum.Search,
-    path: '/123',
-    noRedirect: true
+    name: NavTabEnum.Search,
+    path: ''
   },
   {
     icon: Explore,
     iconActive: ExploreActive,
     title: 'Khám phá',
-    tab: NavTabEnum.Explore,
+    name: NavTabEnum.Explore,
     path: '/explore'
   },
-  { icon: Reel, iconActive: ReelActive, title: 'Reels', tab: NavTabEnum.Reels, path: '/' },
+  { icon: Reel, iconActive: ReelActive, title: 'Reels', name: NavTabEnum.Reels, path: '/' },
   {
     icon: Messenger,
     iconActive: MessengerActive,
     title: 'Tin nhắn',
-    tab: NavTabEnum.Messenger,
+    name: NavTabEnum.Messenger,
     path: '/'
   },
   {
     icon: Heart,
     iconActive: HeartActive,
     title: 'Thông báo',
-    tab: NavTabEnum.Notification,
-    path: '#',
-    noRedirect: true
+    name: NavTabEnum.Notification,
+    path: ''
   },
-  { icon: Plus, iconActive: PlusActive, title: 'Tạo', tab: NavTabEnum.CreatePost, path: '/' }
+  { icon: Plus, iconActive: PlusActive, title: 'Tạo', name: NavTabEnum.CreatePost, path: '' },
+  { title: 'Trang cá nhân', name: NavTabEnum.Profile, path: '/123' }
+]
+
+export const NAVS_MOBILE: Nav[] = [
+  { icon: Home, iconActive: HomeActive, title: 'Trang chủ', name: NavTabEnum.Home, path: '/' },
+  {
+    icon: Explore,
+    iconActive: ExploreActive,
+    title: 'Khám phá',
+    name: NavTabEnum.Explore,
+    path: '/explore'
+  },
+  { icon: Reel, iconActive: ReelActive, title: 'Reels', name: NavTabEnum.Reels, path: '/' },
+  { icon: Plus, iconActive: PlusActive, title: 'Tạo', name: NavTabEnum.CreatePost, path: '' },
+  {
+    icon: Messenger,
+    iconActive: MessengerActive,
+    title: 'Tin nhắn',
+    name: NavTabEnum.Messenger,
+    path: '/'
+  },
+  { title: 'Trang cá nhân', name: NavTabEnum.Profile, path: '/123' }
 ]

@@ -1,3 +1,7 @@
+mobile: 0 - 767
+tablet: 768 - 1263
+pc: 1264 - ~
+
 max-[a] => 0 - a
 min-[a] => a - ~
 

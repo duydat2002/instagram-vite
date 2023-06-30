@@ -2,14 +2,13 @@
 import Loading from '@/components/Utils/Loading.vue'
 
 import { RouterView, useRoute } from 'vue-router'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useUserStore, useThemeStore } from '@/store'
-import { useUser } from '@/composables'
+import { useUser, useResize } from '@/composables'
+import type { Unsubscribe } from 'firebase/auth'
 
-import AuthLayout from '@/layouts/AuthLayout.vue'
-import DashboardLayout from '@/layouts/DashboardLayout.vue'
-
+useResize()
 const route = useRoute()
 const { stopScroll } = storeToRefs(useModalStore())
 const { darkMode } = storeToRefs(useThemeStore())
@@ -22,23 +21,23 @@ watch(darkMode, (newTheme) => {
   else document.documentElement.classList.remove('dark')
 })
 
-const test = ref(false)
-watch(test, (newValue) => {
-  route.meta.layout = newValue ? AuthLayout : DashboardLayout
-})
-
+let unsubscribe: Unsubscribe
 onMounted(() => {
   const { watchUserChange } = useUser()
   const userStore = useUserStore()
 
   userStore.initCurrentUser().then(() => {
     loadingUser.value = false
-    if (userStore.currentUser) watchUserChange(userStore.currentUser.id)
+    if (userStore.currentUser) unsubscribe = watchUserChange(userStore.currentUser.id)
   })
 
   setTimeout(() => {
     loading.value = false
   }, 800)
+})
+
+onBeforeUnmount(() => {
+  unsubscribe()
 })
 </script>
 

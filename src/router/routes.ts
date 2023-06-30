@@ -19,8 +19,6 @@ export default [
 
       await userStore.initCurrentUser()
 
-      console.log(userStore.currentUser)
-
       if (userStore.currentUser) to.meta.layout = DashboardLayout
       else to.meta.layout = AuthLayout
 
@@ -31,7 +29,14 @@ export default [
     path: '/:username',
     name: 'Profile',
     component: () => import('@/views/profile/index.vue'),
-    meta: { title: 'Instagram', layout: DashboardLayout, requiresAuth: true }
+    meta: { title: 'Instagram', layout: DashboardLayout, requiresAuth: true },
+    children: [
+      {
+        path: 'posts',
+        name: 'Posts',
+        component: () => import('../views/Profile/posts.vue')
+      }
+    ]
   },
   {
     path: '/explore',

@@ -50,8 +50,8 @@ const blurInput = () => {
 
 <template>
   <div
-    class="flex items-center relative w-full h-9 rounded-[3px] bg-bgColor-secondary box-content border border-borderColor focus-el:border-borderColor-dark"
-    :class="[{ 'active-label': inputValue != '' }, { 'focus-el': isFocus }]"
+    class="flex items-center relative w-full h-9 rounded-[3px] bg-bgColor-secondary box-content border border-borderColor has-[focus]::border-borderColor-dark"
+    :class="[{ 'active-label': inputValue != '' }, { focus: isFocus }]"
   >
     <div class="flex-auto">
       <input
@@ -68,7 +68,7 @@ const blurInput = () => {
         >{{ placeholder }}</span
       >
     </div>
-    <div v-if="checkValue != null && inputValue != ''" class="check mr-2">
+    <div v-if="checkValue != null && inputValue != ''" class="parent-[.focus]:hidden mr-2">
       <fa v-if="checkValue" :icon="['far', 'circle-check']" style="color: #b4b4b4; height: 22px" />
       <fa v-else :icon="['far', 'circle-xmark']" style="color: #ee2d3e; height: 22px" />
     </div>
@@ -90,9 +90,5 @@ const blurInput = () => {
 
 .active-label .placeholder {
   transform: translateY(-100%) scale(calc(10 / 12));
-}
-
-.focus-el .check {
-  display: none;
 }
 </style>

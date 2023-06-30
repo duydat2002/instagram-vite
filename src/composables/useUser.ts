@@ -45,7 +45,7 @@ export const useUser = () => {
   const watchUserChange = (userId: string) => {
     const userStore = useUserStore()
 
-    const unsubscribe = onSnapshot(doc(db, 'users', userId), (doc) => {
+    return onSnapshot(doc(db, 'users', userId), (doc) => {
       if (doc.exists()) {
         console.log('Data change', userId)
         if (userId == userStore.currentUser!.id) {
@@ -62,10 +62,6 @@ export const useUser = () => {
           console.log(userStore.user?.id)
         }
       }
-    })
-
-    onUnmounted(() => {
-      unsubscribe()
     })
   }
 

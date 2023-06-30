@@ -12,7 +12,7 @@ const footerLinks = ref([
   { path: '/', name: 'Giới thiệu' },
   { path: '/accounts/signup', name: 'Blog' },
   { path: '/accounts/login', name: 'Việc làm' },
-  { path: '/', name: 'Trợ giúp' },
+  { path: '/123/posts', name: 'Trợ giúp' },
   { path: '/', name: 'API' },
   { path: '/', name: 'Quyền riêng tư' },
   { path: '/', name: 'Điều khoản' },

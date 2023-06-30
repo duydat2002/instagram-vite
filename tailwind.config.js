@@ -61,6 +61,11 @@ module.exports = {
       spacing: {
         'nav-narrow': 'var(--nav-narrow-width)',
         'nav-medium': 'var(--nav-medium-width)'
+      },
+      screens: {
+        tablet: '768px',
+        laptop: '1160px',
+        desktop: '1264px'
       }
     }
   },
@@ -68,8 +73,13 @@ module.exports = {
     extend: {}
   },
   plugins: [
-    plugin(function ({ addVariant }) {
-      addVariant('focus-el', '&.focus-el')
+    plugin(function ({ matchVariant }) {
+      matchVariant('has', (value) => {
+        return `&.${value}`
+      })
+      matchVariant('parent', (value) => {
+        return `${value} &`
+      })
     })
   ]
 }

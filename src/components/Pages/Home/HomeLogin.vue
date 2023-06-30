@@ -25,25 +25,25 @@ onBeforeUnmount(() => {
       <div class="home-phone min-[876px]:flex hidden mr-8 mb-3">
         <div class="relative w-full mt-[27px] mr-[21px]">
           <img
-            class="screenshot absolute top-0 right-0 opacity-0"
+            class="screenshot absolute top-0 right-0 opacity-0 has-[active]:opacity-100 transition-opacity duration-[1500ms] ease-out"
             :class="{ active: index == 1 }"
             src="@/assets/images/screenshot1.png"
             alt="Screenshot 1"
           />
           <img
-            class="screenshot absolute top-0 right-0 opacity-0"
+            class="absolute top-0 right-0 opacity-0 has-[active]:opacity-100 transition-opacity duration-[1500ms] ease-out"
             :class="{ active: index == 2 }"
             src="@/assets/images/screenshot2.png"
             alt="Screenshot 2"
           />
           <img
-            class="screenshot absolute top-0 right-0 opacity-0"
+            class="absolute top-0 right-0 opacity-0 has-[active]:opacity-100 transition-opacity duration-[1500ms] ease-out"
             :class="{ active: index == 3 }"
             src="@/assets/images/screenshot3.png"
             alt="Screenshot 3"
           />
           <img
-            class="screenshot absolute top-0 right-0 opacity-0"
+            class="absolute top-0 right-0 opacity-0 has-[active]:opacity-100 transition-opacity duration-[1500ms] ease-out"
             :class="{ active: index == 4 }"
             src="@/assets/images/screenshot4.png"
             alt="Screenshot 4"
@@ -62,13 +62,5 @@ onBeforeUnmount(() => {
   background-image: url('@/assets/images/home-phones.png');
   background-size: 469.32px 629.15px;
   background-position-x: -50px;
-}
-
-.screenshot {
-  transition: opacity 1.5s ease-out;
-}
-
-.screenshot.active {
-  opacity: 1;
 }
 </style>

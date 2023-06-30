@@ -14,14 +14,16 @@ import {
   faArrowLeft,
   faPlus,
   faHeart,
-  faComment
+  faComment,
+  faCircleXmark,
+  faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faSquareFacebook } from '@fortawesome/free-brands-svg-icons'
 
 import {
   faCircleCheck,
-  faCircleXmark,
+  faCircleXmark as farCircleXmark,
   faHeart as farHeart,
   faComment as farComment,
   faBookmark
@@ -39,6 +41,7 @@ library.add(
   faChevronDown,
   faChevronUp,
   faEllipsis,
+  farCircleXmark,
   faXmark,
   faArrowLeft,
   faPlus,
@@ -46,7 +49,8 @@ library.add(
   farHeart,
   faComment,
   farComment,
-  faBookmark
+  faBookmark,
+  faMagnifyingGlass
 )
 
 export { FontAwesomeIcon }

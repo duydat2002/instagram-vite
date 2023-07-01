@@ -1,4 +1,4 @@
-import { ref, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { auth, db } from '@/firebase'
 import {
   collection,
@@ -12,7 +12,9 @@ import {
   type WhereFilterOp
 } from 'firebase/firestore'
 import { useUserStore } from '@/store'
+import { useFollow } from '@/composables'
 import type { IUser } from '@/types'
+import { unionBy } from 'lodash'
 
 export const useUser = () => {
   const currentUser = ref<IUser | null>(null)
@@ -42,6 +44,93 @@ export const useUser = () => {
     else return null
   }
 
+  const getUserWithQuery = async (field: string, condition: string, value: any) => {
+    const querySnapshot = await getDocs(
+      query(collection(db, 'users'), where(field, condition as WhereFilterOp, value))
+    )
+
+    if (querySnapshot.empty) {
+      user.value = null
+    } else {
+      querySnapshot.forEach((doc) => {
+        user.value = {
+          id: doc.id,
+          ...doc.data()
+        } as IUser
+      })
+    }
+
+    return user.value
+  }
+
+  const getUserByUsername = async (username: string) => {
+    return await getUserWithQuery('username', '==', username)
+  }
+
+  // Search use firebase query - phức tạp
+  const searchUsers = async (text: string) => {
+    const usernameQuery = query(
+      collection(db, 'users'),
+      where('search.lowerUsername', '>=', text.toLowerCase()),
+      where('search.lowerUsername', '<', text.toLowerCase() + '\uf8ff')
+    )
+    const fullnameQuery = query(
+      collection(db, 'users'),
+      where('search.lowerFullname', '>=', text.toLowerCase()),
+      where('search.lowerFullname', '<', text.toLowerCase() + '\uf8ff')
+    )
+
+    const [usernameSnapshot, fullnameSnapshot] = await Promise.all([
+      getDocs(usernameQuery),
+      getDocs(fullnameQuery)
+    ])
+    const usernameDocs = usernameSnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data()
+        } as IUser)
+    )
+    const fullnameDocs = fullnameSnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data()
+        } as IUser)
+    )
+
+    const userDocs = unionBy(usernameDocs, fullnameDocs, 'id')
+
+    return userDocs
+  }
+
+  const getUsersWithCheckFollow = async (username: string) => {
+    const { currentUser } = useUserStore()
+    const { isFollowing } = useFollow()
+    const users = await searchUsers(username)
+
+    await Promise.all(
+      users.map(async (user: IUser) => {
+        const isCurrentUserFollowing = await isFollowing(currentUser!.id, user.id)
+        const isCurrentUserFollower = await isFollowing(currentUser!.id, user.id)
+
+        return {
+          ...user,
+          isCurrentUserFollowing,
+          isCurrentUserFollower
+        } as IUser
+      })
+    )
+
+    return users
+  }
+
+  const updateAvatar = async (userId: string, avatar: string) => {
+    await updateDoc(doc(db, 'users', userId), {
+      avatar: avatar
+    })
+  }
+
   const watchUserChange = (userId: string) => {
     const userStore = useUserStore()
 
@@ -65,42 +154,15 @@ export const useUser = () => {
     })
   }
 
-  const getUserWithQuery = async (field: string, condition: string, value: any) => {
-    const querySnapshot = await getDocs(
-      query(collection(db, 'users'), where(field, condition as WhereFilterOp, value))
-    )
-
-    if (querySnapshot.empty) {
-      user.value = null
-    } else {
-      querySnapshot.forEach((doc) => {
-        user.value = {
-          id: doc.id,
-          ...doc.data()
-        } as IUser
-      })
-    }
-
-    return user.value
-  }
-
-  const getUserWithUsername = async (username: string) => {
-    return await getUserWithQuery('username', '==', username)
-  }
-
-  const updateAvatar = async (userId: string, avatar: string) => {
-    await updateDoc(doc(db, 'users', userId), {
-      avatar: avatar
-    })
-  }
-
   return {
     user,
     getUser,
     getCurrentUser,
     watchUserChange,
     getUserWithQuery,
-    getUserWithUsername,
-    updateAvatar
+    getUserByUsername,
+    updateAvatar,
+    searchUsers,
+    getUsersWithCheckFollow
   }
 }

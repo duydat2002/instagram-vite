@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   width: [String, Number],
@@ -9,9 +9,17 @@ const props = defineProps({
   },
   avatarUrl: {
     type: String,
+    // default:
+    //   'https://firebasestorage.googleapis.com/v0/b/instagram-f9ac5.appspot.com/o/defaultAvatar.jpg?alt=media&token=61fbdaa8-a6ed-419c-97e4-a95d2165ae64',
     required: false
   }
 })
+
+const loading = ref(true)
+
+const hanldeLoad = () => {
+  loading.value = false
+}
 
 const sizeAvatar = computed(() => {
   let widthCom = props.width
@@ -27,8 +35,11 @@ const sizeAvatar = computed(() => {
 
 <template>
   <div class="container" :class="{ hasStory }" :style="sizeAvatar">
-    <div class="wrapper">
-      <img src="@/assets/images/defaultAvatar.jpg" alt="" />
+    <div
+      class="w-full h-full border-[2.5px] border-solid border-bgColor-primary rounded-full overflow-hidden"
+    >
+      <div v-if="loading" class="w-full h-full skeleton"></div>
+      <img v-show="!loading" :src="avatarUrl" alt="" @load="hanldeLoad" />
     </div>
   </div>
 </template>
@@ -50,13 +61,5 @@ const sizeAvatar = computed(() => {
     #d6249f 60%,
     #285aeb 90%
   );
-}
-
-.wrapper {
-  width: 100%;
-  height: 100%;
-  border: 2.5px solid var(--primary-bg-color);
-  border-radius: 50%;
-  overflow: hidden;
 }
 </style>

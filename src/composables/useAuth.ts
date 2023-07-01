@@ -19,7 +19,11 @@ export const useAuth = () => {
         username,
         avatar: '',
         bio: '',
-        insight: { followersCount: 0, followingCount: 0, postsCount: 0 }
+        insight: { followersCount: 0, followingCount: 0, postsCount: 0 },
+        search: {
+          lowerUsername: username.toLowerCase(),
+          lowerFullname: fullname.toLowerCase()
+        }
       }
 
       await setDoc(doc(db, 'users', userCredential.user.uid), userData)

@@ -10,9 +10,10 @@ import Avatar from '@/components/Atom/Avatar.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useNavStore, useResizeStore } from '@/store'
+import { useUserStore, useNavStore, useResizeStore } from '@/store'
 import { NAVS, NAVS_MOBILE, NavTabEnum } from '@/constants'
 
+const { currentUser } = storeToRefs(useUserStore())
 const { currentNav } = storeToRefs(useNavStore())
 const { screen } = storeToRefs(useResizeStore())
 const route = useRoute()
@@ -101,10 +102,11 @@ onMounted(() => {
             :is="currentNav == nav.name ? nav.iconActive as string : nav.icon as string"
             class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary"
           />
-          <div v-else class="w-6 h-6 relative">
+          <div v-else class="w-6 h-6 relative flex-shrink-0">
             <Avatar
               class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
               width="36"
+              :avatar-url="currentUser?.avatar"
             />
           </div>
           <span

@@ -12,4 +12,17 @@ export interface IUser {
   }
   isPrivate?: boolean
   newsPosts?: string[]
+
+  search?: {
+    lowerUsername: string
+    lowerFullname: string
+  }
+
+  isCurrentUserFollowing?: boolean
+  isCurrentUserFollower?: boolean
+}
+
+export interface IUserFollow extends IUser {
+  isCurrentUserFollowing?: boolean
+  isCurrentUserFollower?: boolean
 }

@@ -1,6 +1,6 @@
 // Firestore
 
-Users(id, username, email, fullname, avatar, bio, insight{followersCount, followingCount, postsCount}, isPrivate*, newsPosts*)
+Users(id, username, email, fullname, avatar, bio, insight{followersCount, followingCount, postsCount}, isPrivate*, newsPosts*, search{lowerUsername, lowerFullname}, SearchHistory[])
 
 Highlights(id, userId, title, stories[id])
 
@@ -23,6 +23,7 @@ Notifications(id, userId, type[like, comment, follow], postId, senderId, read, c
 Saved(id, userID, postId[], created_at)
 
 Explores(id, userId, postId[])
+
 
 
 // Storage

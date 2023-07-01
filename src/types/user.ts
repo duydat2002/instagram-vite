@@ -1,7 +1,6 @@
-export interface IUser {
-  id: string
-  username: string
-  email: string
+export interface IUserInfo {
+  username?: string
+  email?: string
   fullname?: string
   avatar?: string
   bio?: string
@@ -17,9 +16,14 @@ export interface IUser {
     lowerUsername: string
     lowerFullname: string
   }
+  searchHistory?: string[]
 
   isCurrentUserFollowing?: boolean
   isCurrentUserFollower?: boolean
+}
+
+export interface IUser extends IUserInfo {
+  id: string
 }
 
 export interface IUserFollow extends IUser {

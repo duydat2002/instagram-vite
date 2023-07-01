@@ -12,8 +12,6 @@ import Heart from '@icons/heart.svg'
 import HeartActive from '@icons/heart-active.svg'
 import Plus from '@icons/plus-square.svg'
 import PlusActive from '@icons/plus-square-active.svg'
-import Bar from '@icons/bar.svg'
-import BarActive from '@icons/bar-active.svg'
 
 export enum NavTabEnum {
   Home = 'Home',
@@ -30,7 +28,7 @@ export enum NavTabEnum {
 export interface Nav {
   name: NavTabEnum
   title: string
-  path: string
+  path?: string
   icon?: string
   iconActive?: string
   hideMobie?: boolean
@@ -68,7 +66,7 @@ export const NAVS: Nav[] = [
     path: ''
   },
   { icon: Plus, iconActive: PlusActive, title: 'Tạo', name: NavTabEnum.CreatePost, path: '' },
-  { title: 'Trang cá nhân', name: NavTabEnum.Profile, path: '/123' }
+  { title: 'Trang cá nhân', name: NavTabEnum.Profile, path: `/${123}` }
 ]
 
 export const NAVS_MOBILE: Nav[] = [

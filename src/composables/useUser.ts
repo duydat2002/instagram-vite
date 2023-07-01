@@ -9,11 +9,12 @@ import {
   getDocs,
   updateDoc,
   onSnapshot,
+  documentId,
   type WhereFilterOp
 } from 'firebase/firestore'
 import { useUserStore } from '@/store'
 import { useFollow } from '@/composables'
-import type { IUser } from '@/types'
+import type { IUser, IUserInfo } from '@/types'
 import { unionBy } from 'lodash'
 
 export const useUser = () => {
@@ -104,6 +105,37 @@ export const useUser = () => {
     return userDocs
   }
 
+  const getUserSearchHistory = async () => {
+    try {
+      const { currentUser } = useUserStore()
+      const users: IUser[] = []
+
+      const querySnapshot = await getDocs(
+        query(collection(db, 'users'), where(documentId(), 'in', currentUser?.searchHistory))
+      )
+
+      if (!querySnapshot.empty) {
+        const userMap: { [id: string]: IUser } = {}
+
+        querySnapshot.forEach((doc) => {
+          const user = {
+            id: doc.id,
+            ...doc.data()
+          } as IUser
+          userMap[doc.id] = user
+        })
+
+        currentUser?.searchHistory?.forEach((id) => {
+          if (userMap[id]) users.push(userMap[id])
+        })
+      }
+
+      return users
+    } catch (error) {
+      return []
+    }
+  }
+
   const getUsersWithCheckFollow = async (username: string) => {
     const { currentUser } = useUserStore()
     const { isFollowing } = useFollow()
@@ -128,6 +160,12 @@ export const useUser = () => {
   const updateAvatar = async (userId: string, avatar: string) => {
     await updateDoc(doc(db, 'users', userId), {
       avatar: avatar
+    })
+  }
+
+  const updateUser = async (userId: string, data: IUserInfo) => {
+    await updateDoc(doc(db, 'users', userId), {
+      ...data
     })
   }
 
@@ -163,6 +201,8 @@ export const useUser = () => {
     getUserByUsername,
     updateAvatar,
     searchUsers,
-    getUsersWithCheckFollow
+    updateUser,
+    getUsersWithCheckFollow,
+    getUserSearchHistory
   }
 }

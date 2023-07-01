@@ -1,6 +1,6 @@
 // Firestore
 
-Users(id, username, email, fullname, avatar, bio, insight{followersCount, followingCount, postsCount}, isPrivate*, newsPosts*, search{lowerUsername, lowerFullname}, SearchHistory[])
+Users(id, username, email, fullname, avatar, bio, insight{followersCount, followingCount, postsCount}, isPrivate*, newsPosts*, search{lowerUsername, lowerFullname}, searchHistory[])
 
 Highlights(id, userId, title, stories[id])
 

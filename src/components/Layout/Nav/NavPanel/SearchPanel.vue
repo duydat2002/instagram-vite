@@ -1,23 +1,65 @@
 <script lang="ts" setup>
 import Avatar from '@/components/Atom/Avatar.vue'
 
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { debounce } from '@/helpers'
 import { useUser } from '@/composables'
+import { useUserStore } from '@/store'
+import { unionBy, remove } from 'lodash'
 import type { IUser } from '@/types'
 
 const isFocus = ref(false)
 const isLoading = ref(false)
 const isSearch = ref(false)
 const searchInput = ref('')
-const searchList = ref<IUser[]>([])
+const searchHistory = ref<IUser[]>([])
+const searchList = ref<IUser[] | null>(null)
 
-const searchFn = async (searchText: string) => {
+const emit = defineEmits(['close'])
+
+const handleResetSearch = () => {
+  searchInput.value = ''
+  isSearch.value = false
+  searchList.value = null
+}
+
+const searchUserFn = async (searchText: string) => {
   const { searchUsers } = useUser()
 
   searchList.value = await searchUsers(searchText)
+}
 
-  console.log(searchList.value)
+const updateSearchHistory = async () => {
+  const { updateUser } = useUser()
+  const { currentUser } = useUserStore()
+
+  const searchHistoryIds = searchHistory.value.map((user) => user.id)
+  await updateUser(currentUser!.id, {
+    searchHistory: searchHistoryIds
+  })
+}
+
+const addSearchHistory = async (user: IUser) => {
+  searchHistory.value = unionBy([user], searchHistory.value, 'id')
+  await updateSearchHistory()
+}
+
+const removeSearchHistory = async (user: IUser) => {
+  searchHistory.value = remove(searchHistory.value, (item) => item.id !== user.id)
+  await updateSearchHistory()
+}
+
+const handleClickSearchItem = async (user: IUser) => {
+  await addSearchHistory(user)
+}
+
+const handleClickHistoryItem = async (user: IUser) => {
+  emit('close')
+  await addSearchHistory(user)
+}
+
+const handleDeleteHistoryItem = async (user: IUser) => {
+  await removeSearchHistory(user)
 }
 
 watch(searchInput, (value) => {
@@ -25,12 +67,18 @@ watch(searchInput, (value) => {
   debounce(async () => {
     if (value != '') {
       isSearch.value = true
-      await searchFn(value)
+      await searchUserFn(value)
     } else {
-      isSearch.value = false
+      handleResetSearch()
     }
     isLoading.value = false
   }, 300)
+})
+
+onMounted(async () => {
+  const { getUserSearchHistory } = useUser()
+
+  searchHistory.value = await getUserSearchHistory()
 })
 </script>
 
@@ -62,14 +110,9 @@ watch(searchInput, (value) => {
           </div>
           <fa
             v-else
-            class="text-[#c8c8c8] cursor-pointer"
+            class="text-[#838383] cursor-pointer"
             :icon="['fas', 'circle-xmark']"
-            @click="
-              () => {
-                searchInput = ''
-                isSearch = false
-              }
-            "
+            @click="handleResetSearch"
           />
         </div>
       </div>
@@ -84,48 +127,59 @@ watch(searchInput, (value) => {
             >
           </div>
           <div class="flex flex-col items-center">
-            <div
-              v-for="n in 10"
-              :key="n"
+            <RouterLink
+              v-for="user in searchHistory"
+              :key="user.id"
+              :to="{ name: 'Profile', params: { username: user.username } }"
               class="flex items-center w-full py-2 px-6 cursor-pointer hover:bg-bgColor-secondary"
             >
-              <Avatar class="flex-shrink-0" width="54" :hasStory="Math.random() > 0.5" />
-              <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
-                <span class="text-sm font-semibold">duydat2002</span>
-                <span class="text-sm text-textColor-secondary truncate"
-                  >This is descriptionThis is descriptionThis is description</span
-                >
+              <div class="flex flex-grow overflow-hidden" @click="handleClickHistoryItem(user)">
+                <Avatar
+                  class="flex-shrink-0"
+                  width="54"
+                  :avatarUrl="user.avatar"
+                  :hasStory="Math.random() > 0.5"
+                />
+                <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
+                  <span class="text-sm font-semibold">{{ user.username }}</span>
+                  <span class="text-sm text-textColor-secondary truncate">{{ user.bio }}</span>
+                </div>
               </div>
               <fa
                 class="flex-shrink-0 w-5 h-5 p-2 ml-3 text-textColor-secondary fill-textColor-secondary"
                 :icon="['fas', 'xmark']"
+                @click="handleDeleteHistoryItem(user)"
               />
-            </div>
+            </RouterLink>
           </div>
         </div>
       </div>
       <div v-else class="flex-shrink flex-grow basis-0 overflow-y-auto">
-        <div v-if="searchList.length > 0" class="flex flex-col items-center mt-3">
-          <div
+        <div v-if="!searchList" class="flex w-full h-full items-center justify-center">
+          <div class="animate-spin text-[#838383]">
+            <fa :icon="['fas', 'spinner']" />
+          </div>
+        </div>
+        <div v-else-if="searchList.length > 0" class="flex flex-col items-center mt-3">
+          <RouterLink
             v-for="user in searchList"
             :key="user.id"
+            :to="{ name: 'Profile', params: { username: user.username } }"
             class="flex items-center w-full py-2 px-6 cursor-pointer hover:bg-bgColor-secondary"
           >
-            <Avatar
-              class="flex-shrink-0"
-              width="54"
-              :avatarUrl="user.avatar"
-              :hasStory="Math.random() > 0.5"
-            />
-            <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
-              <span class="text-sm font-semibold">{{ user.username }}</span>
-              <span class="text-sm text-textColor-secondary truncate">{{ user.bio }}</span>
+            <div class="flex flex-grow overflow-hidden" @click="handleClickSearchItem(user)">
+              <Avatar
+                class="flex-shrink-0"
+                width="54"
+                :avatarUrl="user.avatar"
+                :hasStory="Math.random() > 0.5"
+              />
+              <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
+                <span class="text-sm font-semibold">{{ user.username }}</span>
+                <span class="text-sm text-textColor-secondary truncate">{{ user.bio }}</span>
+              </div>
             </div>
-            <fa
-              class="flex-shrink-0 w-5 h-5 p-2 ml-3 text-textColor-secondary fill-textColor-secondary"
-              :icon="['fas', 'xmark']"
-            />
-          </div>
+          </RouterLink>
         </div>
         <div v-else class="w-full h-full flex items-center justify-center text-textColor-secondary">
           Không tìm thấy kết quả nào

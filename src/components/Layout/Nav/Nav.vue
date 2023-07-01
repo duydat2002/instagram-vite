@@ -3,15 +3,15 @@ import LogoText from '@icons/logo-text.svg'
 import Logo from '@icons/logo.svg'
 import Bar from '@icons/bar.svg'
 import BarActive from '@icons/bar-active.svg'
-import SearchPanel from '@/components/Layout/Nav/NavPanel/SearchPanel.vue'
-import NotifyPanel from '@/components/Layout/Nav/NavPanel/NotifyPanel.vue'
-import Avatar from '@/components/Atom/Avatar.vue'
+import SearchPanel from './NavPanel/SearchPanel.vue'
+import NotifyPanel from './NavPanel/NotifyPanel.vue'
+import NavItem from './NavItem.vue'
 
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore, useNavStore, useResizeStore } from '@/store'
-import { NAVS, NAVS_MOBILE, NavTabEnum } from '@/constants'
+import { NAVS, NAVS_MOBILE, NavTabEnum, type Nav } from '@/constants'
 
 const { currentUser } = storeToRefs(useUserStore())
 const { currentNav } = storeToRefs(useNavStore())
@@ -29,7 +29,7 @@ const changeTab = (nav: NavTabEnum) => {
   currentNav.value = nav
 }
 
-const handleSearchClickOutside = () => {
+const handleCloseSearchPanel = () => {
   searchPanelActive.value = false
   currentNav.value = route.matched[0].name as NavTabEnum
 }
@@ -54,12 +54,17 @@ const isNarrowCom = computed(() => {
     : false
 })
 
-watch(route, (to) => {
-  currentNav.value = to.matched[0].name as NavTabEnum
+const tabBarCom = computed(() => {
+  return {
+    name: NavTabEnum.Bar,
+    title: 'Xem thêm',
+    icon: Bar,
+    iconActive: BarActive
+  } as Nav
 })
 
-watch(currentNav, (to) => {
-  console.log(to)
+watch(route, (to) => {
+  currentNav.value = to.matched[0].name as NavTabEnum
 })
 
 onMounted(() => {
@@ -89,51 +94,31 @@ onMounted(() => {
       <div
         class="flex flex-row min-[768px]:flex-col flex-grow justify-center min-[768px]:justify-normal"
       >
-        <RouterLink
+        <NavItem
           v-for="nav in navCom"
           :key="nav.name"
-          :to="nav.path"
-          class="nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
-          :class="{ active: currentNav == nav.name }"
-          @click="changeTab(nav.name)"
-        >
-          <component
-            v-if="nav.name != NavTabEnum.Profile"
-            :is="currentNav == nav.name ? nav.iconActive as string : nav.icon as string"
-            class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary"
-          />
-          <div v-else class="w-6 h-6 relative flex-shrink-0">
-            <Avatar
-              class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              width="36"
-              :avatar-url="currentUser?.avatar"
-            />
-          </div>
-          <span
-            class="hidden min-[1264px]:block parent-[.isNarrow]:hidden min-w-max pl-4 text-base text-textColor-primary parent-[.nav-item.active]:font-bold"
-            >{{ nav.title }}</span
-          >
-        </RouterLink>
-      </div>
-      <RouterLink
-        to=""
-        class="nav-item hidden min-[768px]:flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
-        :class="{ active: currentNav == NavTabEnum.Bar }"
-        @click="changeTab(NavTabEnum.Bar)"
-      >
-        <component
-          :is="currentNav == NavTabEnum.Bar ? BarActive : Bar"
-          class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary"
+          :nav="nav"
+          :current-user="currentUser"
+          :current-nav="currentNav"
+          @change-tab="changeTab"
         />
-        <span
-          class="hidden min-[1264px]:block parent-[.isNarrow]:hidden min-w-max pl-4 text-base text-textColor-primary parent-[.nav-item.active]:font-bold"
-          >Xem thêm</span
-        >
-      </RouterLink>
+      </div>
+      <div class="hidden min-[768px]:block">
+        <NavItem
+          :nav="tabBarCom"
+          :current-user="currentUser"
+          :current-nav="currentNav"
+          @change-tab="changeTab"
+        />
+      </div>
     </div>
     <div class="fixed top-0 bottom-0 left-nav-narrow -z-10">
       <Transition name="fadeRight">
-        <SearchPanel v-if="searchPanelActive" v-click-outside="handleSearchClickOutside" />
+        <SearchPanel
+          v-if="searchPanelActive"
+          @close="handleCloseSearchPanel"
+          v-click-outside="handleCloseSearchPanel"
+        />
       </Transition>
       <Transition name="fadeRight">
         <NotifyPanel v-if="notifyPanelActive" v-click-outside="handleNotifyClickOutside" />

@@ -76,7 +76,7 @@ export const useAuth = () => {
           } as IUser
         })
 
-        await signInWithEmailAndPassword(auth, user!.email, password)
+        await signInWithEmailAndPassword(auth, user!.email as string, password)
 
         return user
       }

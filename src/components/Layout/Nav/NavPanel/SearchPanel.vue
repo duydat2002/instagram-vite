@@ -62,6 +62,11 @@ const handleDeleteHistoryItem = async (user: IUser) => {
   await removeSearchHistory(user)
 }
 
+const handleDeleteAllHistory = async () => {
+  searchHistory.value = []
+  await updateSearchHistory()
+}
+
 watch(searchInput, (value) => {
   isLoading.value = true
   debounce(async () => {
@@ -123,6 +128,7 @@ onMounted(async () => {
             <span class="text-base font-semibold">Gần đây</span>
             <span
               class="text-sm font-semibold text-buttonColor-primary hover:text-link cursor-pointer"
+              @click="handleDeleteAllHistory"
               >Xóa tất cả</span
             >
           </div>

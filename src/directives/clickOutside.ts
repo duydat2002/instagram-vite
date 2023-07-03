@@ -7,13 +7,27 @@ interface ExtendHTMLElement extends HTMLElement {
   _clickEvent?: Fn<MouseEvent, void>
 }
 
+const getParent = (el: ExtendHTMLElement) => {
+  const app = document.querySelector('#app')
+  const modal = document.querySelector('#modal')
+  const popup = document.querySelector('#popup')
+
+  if (app?.contains(el)) return app
+  if (modal?.contains(el)) return modal
+  if (popup?.contains(el)) return popup
+}
+
+const checkClickOutside = (el: ExtendHTMLElement, elClick: ExtendHTMLElement) => {
+  return el !== elClick && !el.contains(elClick) && getParent(el) === getParent(elClick)
+}
+
 export const ClickOuside: Directive = {
   mounted(el: ExtendHTMLElement, binding: DirectiveBinding) {
     if (!binding.modifiers.short) {
       let mouseDownPosition: Nullable<IPoint> = null
 
       el._mouseDownEvent = (event: MouseEvent) => {
-        if (!(el === event.target || el.contains(event.target as Node))) {
+        if (checkClickOutside(el, event.target as ExtendHTMLElement)) {
           mouseDownPosition = { x: event.clientX, y: event.clientY }
         }
       }
@@ -36,7 +50,7 @@ export const ClickOuside: Directive = {
       document.body.addEventListener('mouseup', el._mouseUpEvent)
     } else {
       el._clickEvent = (event: MouseEvent) => {
-        if (!(el === event.target || el.contains(event.target as Node))) {
+        if (checkClickOutside(el, event.target as ExtendHTMLElement)) {
           binding.value(event)
         }
       }

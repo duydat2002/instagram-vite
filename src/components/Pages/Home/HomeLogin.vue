@@ -21,7 +21,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="w-full my-8 max-[450px]:my-0">
-    <div class="flex justify-center items-center">
+    <div class="flex flex-center">
       <div class="home-phone min-[876px]:flex hidden mr-8 mb-3">
         <div class="relative w-full mt-[27px] mr-[21px]">
           <img

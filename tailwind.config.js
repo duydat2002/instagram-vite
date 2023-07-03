@@ -73,12 +73,18 @@ module.exports = {
     extend: {}
   },
   plugins: [
-    plugin(function ({ matchVariant }) {
+    plugin(function ({ matchVariant, addUtilities }) {
       matchVariant('has', (value) => {
         return `&.${value}`
       })
       matchVariant('parent', (value) => {
         return `${value} &`
+      })
+      addUtilities({
+        '.flex-center': {
+          'align-items': 'center',
+          'justify-content': 'center'
+        }
       })
     })
   ]

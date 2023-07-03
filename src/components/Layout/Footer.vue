@@ -79,7 +79,7 @@ const currentLanguage = ref<ILanguage>({ value: 'vi', name: 'Tiếng Việt' })
 </script>
 
 <template>
-  <footer class="flex flex-col items-center justify-center mt-6 mb-[52px] px-4">
+  <footer class="flex flex-col flex-center mt-6 mb-[52px] px-4">
     <div class="flex flex-wrap justify-center">
       <div v-for="link in footerLinks" :key="link.name" class="mx-2 mb-1">
         <RouterLink

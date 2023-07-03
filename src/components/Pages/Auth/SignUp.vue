@@ -202,7 +202,7 @@ const handleCheckPassword = () => {
     </div>
     <div class="mt-[10px] text-center">
       <p class="text-sm my-[10px]">Tải ứng dụng.</p>
-      <div class="flex my-[10px] flex-wrap items-center justify-center gap-2">
+      <div class="flex my-[10px] flex-wrap flex-center gap-2">
         <RouterLink to="/" class="h-10">
           <img
             class="h-full"

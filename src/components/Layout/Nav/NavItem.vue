@@ -30,7 +30,8 @@ const handleChangeTab = (nav: NavTabEnum) => {
     <div v-else class="w-6 h-6 relative flex-shrink-0">
       <Avatar
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        width="36"
+        :class="{ 'shadow-[inset_0_0_0_2px_#000]': currentNav == NavTabEnum.Profile }"
+        width="34"
         :avatar-url="currentUser?.avatar"
       />
     </div>

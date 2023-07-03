@@ -31,7 +31,6 @@ const submitLoginForm = async () => {
   if (user) {
     setCurrentUser(user)
     authError.value = null
-    console.log(route.path)
     if (route.path != '/') router.push('/')
     else router.go(0)
   } else {
@@ -94,7 +93,7 @@ const submitLoginForm = async () => {
     </div>
     <div class="text-center">
       <p class="text-sm my-4">Tải ứng dụng.</p>
-      <div class="flex my-[10px] flex-wrap items-center justify-center gap-2">
+      <div class="flex my-[10px] flex-wrap flex-center gap-2">
         <RouterLink to="/" class="h-10">
           <img
             class="h-full"

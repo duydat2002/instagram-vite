@@ -46,10 +46,7 @@ const navCom = computed(() => {
 
 const isNarrowCom = computed(() => {
   if (screen.value == 'mobile') return false
-  return searchPanelActive.value ||
-    notifyPanelActive.value ||
-    barPanelActive.value ||
-    screen.value == 'tablet'
+  return searchPanelActive.value || notifyPanelActive.value || screen.value == 'tablet'
     ? true
     : false
 })

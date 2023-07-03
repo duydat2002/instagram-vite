@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import Avatar from '@/components/Atom/Avatar.vue'
+import SearchListVue from './SearchList.vue'
+import ConfirmPopup from '@/components/Popup/ConfirmPopup.vue'
 
 import { ref, watch, onMounted } from 'vue'
 import { debounce } from '@/helpers'
@@ -11,8 +12,9 @@ import type { IUser } from '@/types'
 const isFocus = ref(false)
 const isLoading = ref(false)
 const isSearch = ref(false)
+const deleteAllPopup = ref(false)
 const searchInput = ref('')
-const searchHistory = ref<IUser[]>([])
+const searchHistory = ref<IUser[] | null>(null)
 const searchList = ref<IUser[] | null>(null)
 
 const emit = defineEmits(['close'])
@@ -33,7 +35,7 @@ const updateSearchHistory = async () => {
   const { updateUser } = useUser()
   const { currentUser } = useUserStore()
 
-  const searchHistoryIds = searchHistory.value.map((user) => user.id)
+  const searchHistoryIds = searchHistory.value?.map((user) => user.id)
   await updateUser(currentUser!.id, {
     searchHistory: searchHistoryIds
   })
@@ -45,7 +47,7 @@ const addSearchHistory = async (user: IUser) => {
 }
 
 const removeSearchHistory = async (user: IUser) => {
-  searchHistory.value = remove(searchHistory.value, (item) => item.id !== user.id)
+  searchHistory.value = remove(searchHistory.value!, (item) => item.id !== user.id)
   await updateSearchHistory()
 }
 
@@ -64,7 +66,12 @@ const handleDeleteHistoryItem = async (user: IUser) => {
 
 const handleDeleteAllHistory = async () => {
   searchHistory.value = []
+  closeDeleteAllPopup()
   await updateSearchHistory()
+}
+
+const closeDeleteAllPopup = () => {
+  deleteAllPopup.value = false
 }
 
 watch(searchInput, (value) => {
@@ -107,9 +114,13 @@ onMounted(async () => {
           placeholder="Tìm kiếm"
           v-model="searchInput"
           @focus="isFocus = true"
-          @blur="isFocus = false"
+          v-click-outside="
+            () => {
+              isFocus = false
+            }
+          "
         />
-        <div class="absolute top-1/2 right-4 -translate-y-1/2">
+        <div v-show="isFocus" class="absolute top-1/2 right-4 -translate-y-1/2">
           <div v-if="isLoading" class="animate-spin text-[#c8c8c8]">
             <fa :icon="['fas', 'spinner']" />
           </div>
@@ -123,74 +134,48 @@ onMounted(async () => {
       </div>
       <div class="mt-6 border-t border-borderColor"></div>
       <div v-if="!isSearch" class="flex-shrink flex-grow basis-0 overflow-y-auto">
-        <div class="flex flex-col">
+        <div class="flex flex-col h-full">
           <div class="flex items-center justify-between my-4 px-6">
             <span class="text-base font-semibold">Gần đây</span>
             <span
+              v-if="searchHistory && searchHistory.length > 0"
               class="text-sm font-semibold text-buttonColor-primary hover:text-link cursor-pointer"
-              @click="handleDeleteAllHistory"
+              @click="
+                () => {
+                  deleteAllPopup = true
+                }
+              "
               >Xóa tất cả</span
             >
           </div>
-          <div class="flex flex-col items-center">
-            <RouterLink
-              v-for="user in searchHistory"
-              :key="user.id"
-              :to="{ name: 'Profile', params: { username: user.username } }"
-              class="flex items-center w-full py-2 px-6 cursor-pointer hover:bg-bgColor-secondary"
-            >
-              <div class="flex flex-grow overflow-hidden" @click="handleClickHistoryItem(user)">
-                <Avatar
-                  class="flex-shrink-0"
-                  width="54"
-                  :avatarUrl="user.avatar"
-                  :hasStory="Math.random() > 0.5"
-                />
-                <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
-                  <span class="text-sm font-semibold">{{ user.username }}</span>
-                  <span class="text-sm text-textColor-secondary truncate">{{ user.bio }}</span>
-                </div>
-              </div>
-              <fa
-                class="flex-shrink-0 w-5 h-5 p-2 ml-3 text-textColor-secondary fill-textColor-secondary"
-                :icon="['fas', 'xmark']"
-                @click="handleDeleteHistoryItem(user)"
-              />
-            </RouterLink>
-          </div>
+          <SearchListVue
+            :searchList="searchHistory"
+            hasDelete
+            notFoundMessage="Không có nội dung tìm kiếm mới đây."
+            @clickItem="handleClickHistoryItem"
+            @deleteItem="handleDeleteHistoryItem"
+          />
         </div>
       </div>
       <div v-else class="flex-shrink flex-grow basis-0 overflow-y-auto">
-        <div v-if="!searchList" class="flex w-full h-full items-center justify-center">
-          <div class="animate-spin text-[#838383]">
-            <fa :icon="['fas', 'spinner']" />
-          </div>
-        </div>
-        <div v-else-if="searchList.length > 0" class="flex flex-col items-center mt-3">
-          <RouterLink
-            v-for="user in searchList"
-            :key="user.id"
-            :to="{ name: 'Profile', params: { username: user.username } }"
-            class="flex items-center w-full py-2 px-6 cursor-pointer hover:bg-bgColor-secondary"
-          >
-            <div class="flex flex-grow overflow-hidden" @click="handleClickSearchItem(user)">
-              <Avatar
-                class="flex-shrink-0"
-                width="54"
-                :avatarUrl="user.avatar"
-                :hasStory="Math.random() > 0.5"
-              />
-              <div class="flex flex-col flex-grow flex-shrink ml-3 overflow-hidden">
-                <span class="text-sm font-semibold">{{ user.username }}</span>
-                <span class="text-sm text-textColor-secondary truncate">{{ user.bio }}</span>
-              </div>
-            </div>
-          </RouterLink>
-        </div>
-        <div v-else class="w-full h-full flex items-center justify-center text-textColor-secondary">
-          Không tìm thấy kết quả nào
-        </div>
+        <SearchListVue
+          :searchList="searchList"
+          notFoundMessage="Không tìm thấy kết quả nào."
+          @clickItem="handleClickSearchItem"
+        />
       </div>
     </div>
+    <ConfirmPopup
+      v-if="deleteAllPopup"
+      title="Xóa lịch sử tìm kiếm?"
+      desc="Bạn sẽ không thể hoàn tác
+            hành động này. Nếu xóa lịch sử tìm kiếm, có thể bạn vẫn nhìn thấy các tài khoản mình đã
+            tìm trong kết quả gợi ý."
+      confirmMessage="Clear all"
+      cancelMessage="Lúc khác"
+      @confirm="handleDeleteAllHistory"
+      @cancel="closeDeleteAllPopup"
+      @click-outside="closeDeleteAllPopup"
+    />
   </div>
 </template>

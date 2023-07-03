@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import LogoText from '@icons/logo-text.svg'
 import Logo from '@icons/logo.svg'
-import Bar from '@icons/bar.svg'
-import BarActive from '@icons/bar-active.svg'
 import SearchPanel from './NavPanel/SearchPanel.vue'
 import NotifyPanel from './NavPanel/NotifyPanel.vue'
 import NavItem from './NavItem.vue'
@@ -10,14 +8,17 @@ import NavItem from './NavItem.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useUserStore, useNavStore, useResizeStore } from '@/store'
-import { NAVS, NAVS_MOBILE, NavTabEnum, type Nav } from '@/constants'
+import { useUserStore, useResizeStore } from '@/store'
+import { NavTabEnum } from '@/types'
+import { useNav } from '@/composables'
 
 const { currentUser } = storeToRefs(useUserStore())
-const { currentNav } = storeToRefs(useNavStore())
 const { screen } = storeToRefs(useResizeStore())
 const route = useRoute()
 
+const { navs, tabBar } = useNav()
+
+const currentNav = ref<NavTabEnum>(NavTabEnum.Home)
 const searchPanelActive = ref(false)
 const notifyPanelActive = ref(false)
 const barPanelActive = ref(false)
@@ -39,25 +40,11 @@ const handleNotifyClickOutside = () => {
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
-const navCom = computed(() => {
-  if (screen.value == 'mobile') return NAVS_MOBILE
-  else return NAVS
-})
-
 const isNarrowCom = computed(() => {
   if (screen.value == 'mobile') return false
   return searchPanelActive.value || notifyPanelActive.value || screen.value == 'tablet'
     ? true
     : false
-})
-
-const tabBarCom = computed(() => {
-  return {
-    name: NavTabEnum.Bar,
-    title: 'Xem thêm',
-    icon: Bar,
-    iconActive: BarActive
-  } as Nav
 })
 
 watch(route, (to) => {
@@ -92,7 +79,7 @@ onMounted(() => {
         class="flex flex-row min-[768px]:flex-col flex-grow justify-center min-[768px]:justify-normal"
       >
         <NavItem
-          v-for="nav in navCom"
+          v-for="nav in navs"
           :key="nav.name"
           :nav="nav"
           :current-user="currentUser"
@@ -102,7 +89,7 @@ onMounted(() => {
       </div>
       <div class="hidden min-[768px]:block">
         <NavItem
-          :nav="tabBarCom"
+          :nav="tabBar"
           :current-user="currentUser"
           :current-nav="currentNav"
           @change-tab="changeTab"

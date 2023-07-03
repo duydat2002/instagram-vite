@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import Avatar from '@/components/Atom/Avatar.vue'
-import { NavTabEnum, type Nav } from '@/constants'
-import type { IUser } from '@/types'
+import type { IUser, INav } from '@/types'
+import { NavTabEnum } from '@/types'
 
 const emit = defineEmits(['changeTab'])
 defineProps<{
-  nav: Nav
+  nav: INav
   currentNav: NavTabEnum
   currentUser: Nullable<IUser>
 }>()
@@ -24,8 +24,8 @@ const handleChangeTab = (nav: NavTabEnum) => {
   >
     <component
       v-if="nav.name != NavTabEnum.Profile"
+      :is="currentNav == nav.name ? nav.iconActive : nav.icon"
       class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary"
-      :is="currentNav == nav.name ? nav.iconActive as string : nav.icon as string"
     />
     <div v-else class="w-6 h-6 relative flex-shrink-0">
       <Avatar

@@ -2,6 +2,7 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
 import { useUserStore } from '@/store'
+import { useUser } from '@/composables'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 export default [
@@ -30,6 +31,27 @@ export default [
     name: 'Profile',
     component: () => import('@/views/profile/index.vue'),
     meta: { title: 'Instagram', layout: DashboardLayout, requiresAuth: true },
+    beforeEnter: (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalized,
+      next: NavigationGuardNext
+    ) => {
+      const { getUserByUsername } = useUser()
+      getUserByUsername(to.params.username as string).then((user) => {
+        if (!user) {
+          next({
+            name: 'NotFound',
+            params: { pathMatch: to.path.substring(1).split('/') },
+            query: to.query,
+            hash: to.hash
+          })
+        } else {
+          const { setUser } = useUserStore()
+          setUser(user)
+          next()
+        }
+      })
+    },
     children: [
       {
         path: 'posts',

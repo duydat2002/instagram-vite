@@ -47,7 +47,8 @@ onUnmounted(() => {
   <Teleport :to="isPopup ? '#popup' : '#modal'">
     <div
       v-if="isShow"
-      class="fixed top-0 left-0 right-0 bottom-0 flex flex-center bg-[#0000004d] z-50"
+      class="fixed top-0 left-0 right-0 bottom-0 flex flex-center bg-[#0000004d]"
+      :class="isPopup ? 'z-50' : 'z-40'"
     >
       <div class="m-5 flex flex-center" v-click-outside="handleClickOutsideModal">
         <slot />

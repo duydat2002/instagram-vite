@@ -1,10 +1,4 @@
-<script setup lang="ts">
-import { onBeforeMount } from 'vue'
-
-onBeforeMount(() => {
-  document.title = 'Không tìm thấy trang - Instagram'
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="p-10 text-center text-textColor-primary">

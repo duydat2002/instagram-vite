@@ -17,16 +17,14 @@ export interface IUserInfo {
     lowerFullname: string
   }
   searchHistory?: string[]
-
-  isCurrentUserFollowing?: boolean
-  isCurrentUserFollower?: boolean
 }
 
-export interface IUser extends IUserInfo {
+export interface IUserFollowData {
+  isCurrentUserFollowing?: boolean
+  isCurrentUserFollower?: boolean
+  mutualFollowers?: IUser[]
+}
+
+export interface IUser extends IUserInfo, IUserFollowData {
   id: string
-}
-
-export interface IUserFollow extends IUser {
-  isCurrentUserFollowing?: boolean
-  isCurrentUserFollower?: boolean
 }

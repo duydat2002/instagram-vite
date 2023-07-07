@@ -5,7 +5,7 @@ import SearchPanel from './NavPanel/SearchPanel.vue'
 import NotifyPanel from './NavPanel/NotifyPanel.vue'
 import NavItem from './NavItem.vue'
 
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore, useResizeStore } from '@/store'
@@ -47,18 +47,18 @@ const isNarrowCom = computed(() => {
     : false
 })
 
-watch(route, (to) => {
-  currentNav.value = to.matched[0].name as NavTabEnum
-})
-
-onMounted(() => {
-  currentNav.value = route.matched[0].name as NavTabEnum
-})
+watch(
+  route,
+  (to) => {
+    currentNav.value = to.matched[0].name as NavTabEnum
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
   <div
-    class="fixed top-auto min-[768px]:top-0 bottom-0 min-[768px]:bottom-auto left-0 h-12 min-[768px]:h-screen w-full min-[1264px]:w-nav-medium min-[768px]:w-nav-narrow has-[isNarrow]:w-nav-narrow transition-[width] duration-300"
+    class="fixed z-10 top-auto min-[768px]:top-0 bottom-0 min-[768px]:bottom-auto left-0 h-12 min-[768px]:h-screen w-full min-[1264px]:w-nav-medium min-[768px]:w-nav-narrow has-[isNarrow]:w-nav-narrow transition-[width] duration-300"
     :class="{ isNarrow: isNarrowCom }"
   >
     <div

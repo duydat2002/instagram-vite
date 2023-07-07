@@ -63,7 +63,12 @@ const submitLoginForm = async () => {
           type="password"
           v-model:propValue="password"
         />
-        <UiButton type="submit" primary class="mt-4 mb-4" :disabled="isDisable" :isLoading="loading"
+        <UiButton
+          type="submit"
+          primary
+          class="mt-4 mb-4 w-full"
+          :disabled="isDisable"
+          :isLoading="loading"
           >Đăng nhập</UiButton
         >
         <div class="flex items-center mb-5">

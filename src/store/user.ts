@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useUser } from '@/composables'
+import { useUser, useFollow } from '@/composables'
 import type { IUser } from '@/types'
 
 interface IState {
@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
     currentUser: null //Người dùng đang đăng nhập
   }),
   actions: {
-    setUser(user: Nullable<IUser>) {
+    async setUser(user: Nullable<IUser>) {
       this.user = user
     },
     setCurrentUser(currentUser: Nullable<IUser>) {
@@ -29,6 +29,20 @@ export const useUserStore = defineStore('user', {
       const { getCurrentUser } = useUser()
 
       this.currentUser = await getCurrentUser()
+    },
+    async initUserWithFollow(user: IUser) {
+      const { isFollowing, getMutualFollowers } = useFollow()
+      if (this.currentUser) {
+        const isCurrentUserFollowing = await isFollowing(this.currentUser.id, user.id)
+        const mutualFollowers = await getMutualFollowers(user.id)
+
+        user = {
+          ...user,
+          isCurrentUserFollowing,
+          mutualFollowers
+        } as IUser
+      }
+      this.user = user
     }
   }
 })

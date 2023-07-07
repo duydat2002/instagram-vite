@@ -49,7 +49,7 @@ const classes = computed(() => {
 
 <template>
   <button
-    class="relative w-full font-semibold select-none disabled:opacity-60 disabled:pointer-events-none"
+    class="relative font-semibold select-none disabled:opacity-60 disabled:pointer-events-none"
     :class="[classes, classProps]"
     :style="{ color, backgroundColor }"
     :type="type"

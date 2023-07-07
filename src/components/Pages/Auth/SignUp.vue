@@ -123,7 +123,7 @@ const handleCheckPassword = () => {
         Đăng ký để xem ảnh và video từ bạn bè.
       </h2>
       <form id="signupForm" class="w-full text-center mb-[18px]" @submit.prevent="submitSignupForm">
-        <UiButton variant="contained" primary class="mb-[18px]">
+        <UiButton variant="contained" primary class="mb-[18px] w-full">
           <div class="w-[18px] h-[18px] mr-2 inline-block">
             <fa class="w-full h-full" :icon="['fab', 'square-facebook']" style="color: #ffffff" />
           </div>
@@ -184,8 +184,8 @@ const handleCheckPassword = () => {
             của chúng tôi.
           </span>
         </p>
-        <ui-button type="submit" primary :disabled="isDisable" :isLoading="loading"
-          >Đăng ký</ui-button
+        <UiButton type="submit" class="w-full" primary :disabled="isDisable" :isLoading="loading"
+          >Đăng ký</UiButton
         >
         <p v-if="isShowError" class="text-sm text-error mt-8 mb-4">
           {{ authError.emailOrPhoneError || authError.usernameError || authError.signupError }}

@@ -1,4 +1,6 @@
-export function formatNumberToSuffix(number: number) {
+export function formatNumberToSuffix(number: number | undefined) {
+  if (number === undefined) return
+
   const suffixes = ['', 'K', 'M', 'B', 'T']
 
   if (number < 10000) {

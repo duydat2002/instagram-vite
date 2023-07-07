@@ -12,6 +12,70 @@ import {
   collection
 } from 'firebase/firestore'
 import { ref, onBeforeUnmount } from 'vue'
+import { useUser } from '@/composables'
+import { updateWithTransaction } from '@/helpers'
+import { useUserStore } from '@/store'
+import { get as lodashGet } from 'lodash'
+import type { IUser } from '@/types'
+
+export const useFollow = () => {
+  const isFollowing = async (followerId: string, followingId: string) => {
+    const docSnap = await getDoc(doc(db, 'followers', `${followerId}-${followingId}`))
+
+    return docSnap.exists()
+  }
+
+  const getMutualFollowers = async (userId: string) => {
+    const { currentUser } = useUserStore()
+    const users: IUser[] = []
+
+    if (currentUser) {
+      console.log('getMutualFollowers', currentUser.id)
+
+      // Get currentUserFollowings
+      const querySnap = await getDocs(
+        query(collection(db, 'followers'), where('followerId', '==', currentUser.id))
+      )
+
+      // Check currentUserFollowings followings user
+      const { getUser } = useUser()
+      const promises = querySnap.docs.map(async (followDoc) => {
+        const docSnap = await getDoc(
+          doc(db, 'followers', `${followDoc.data().followingId}-${userId}`)
+        )
+
+        if (docSnap.exists()) {
+          const user = await getUser(docSnap.data().followerId)
+          users.push(user!)
+        }
+      })
+
+      await Promise.all(promises)
+    }
+    return users
+  }
+
+  return {
+    isFollowing,
+    getMutualFollowers
+  }
+}
+
+/*
+import { db } from '@/firebase'
+import {
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  where,
+  collection
+} from 'firebase/firestore'
+import { ref, onBeforeUnmount } from 'vue'
 import { updateWithTransaction } from '@/helpers'
 import { useUserStore } from '@/store'
 import { get as lodashGet } from 'lodash'
@@ -91,7 +155,7 @@ export const useFollow = () => {
 
   const getMutualFollowers = async () => {
     const { currentUser, user } = useUserStore()
-    const users = ref<IUser[]>([])
+    const users: IUser[] = []
 
     const querySnap = await getDocs(
       query(collection(db, 'followers'), where('followingId', '==', user?.id))
@@ -103,7 +167,7 @@ export const useFollow = () => {
         //Check currentUser follow?
         const isCurrentUserFollowing = await isFollowing(currentUser!.id, docSnap.id)
         if (isCurrentUserFollowing) {
-          users.value.push({
+          users.push({
             id: docSnap.id,
             ...docSnap.data(),
             isCurrentUserFollowing
@@ -192,3 +256,5 @@ export const useFollow = () => {
     watchFollowChange
   }
 }
+
+*/

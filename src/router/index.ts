@@ -7,6 +7,8 @@ import { auth } from '@/firebase'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  linkActiveClass: 'link-active',
+  linkExactActiveClass: 'exact-link-active',
   routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -22,7 +24,6 @@ const authPath = ['/accounts/login', '/accounts/signup']
 router.beforeEach(async (to, from) => {
   const { startLoading } = useLoadingStore()
   startLoading()
-
   if (to.meta.requiresAuth && !auth.currentUser) {
     return '/accounts/login'
   } else {
@@ -35,11 +36,9 @@ router.beforeEach(async (to, from) => {
 })
 
 router.afterEach((to, from) => {
+  if (to.meta.title) document.title = (to.meta.title as string) || 'Instagram'
   const { stopLoading } = useLoadingStore()
   stopLoading()
-  nextTick(() => {
-    document.title = (to.meta.title as string) || 'Instagram'
-  })
 })
 
 export default router

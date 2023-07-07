@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import Suggest from '@/components/Layout/Suggest.vue'
+
 import { auth } from '@/firebase'
 import { signOut } from 'firebase/auth'
 import { useUserStore } from '@/store'
@@ -24,9 +26,12 @@ const home = () => {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div class="mt-10 cursor-pointer" @click="home">Home</div>
-    <div class="mt-10 cursor-pointer" @click="logout">Logout</div>
-    <div class="mt-10 cursor-pointer" @click="show">user</div>
+  <div class="flex">
+    <div class="flex flex-col flex-grow">
+      <div class="mt-10 cursor-pointer" @click="home">Home</div>
+      <div class="mt-10 cursor-pointer" @click="logout">Logout</div>
+      <div class="mt-10 cursor-pointer" @click="show">user</div>
+    </div>
+    <Suggest />
   </div>
 </template>

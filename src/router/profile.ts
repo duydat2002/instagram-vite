@@ -15,7 +15,6 @@ export default {
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
-    console.log('beforeEnter')
     const { getUserByUsername } = useUser()
     getUserByUsername(to.params.username as string).then(async (user) => {
       if (!user) {
@@ -52,24 +51,24 @@ export default {
     {
       path: 'followers',
       name: 'Followers',
-      component: () => import('../components/Popup/FollowsPopup.vue'),
+      component: () => import('../components/Modal/FollowsModal.vue'),
       children: [
         {
           path: 'mutualOnly',
           name: 'MutualFollowers',
-          component: () => import('../components/Popup/FollowsPopup.vue')
+          component: () => import('../components/Modal/FollowsModal.vue')
         },
         {
           path: 'mutualFirst',
           name: 'MutualFirstFollowers',
-          component: () => import('../components/Popup/FollowsPopup.vue')
+          component: () => import('../components/Modal/FollowsModal.vue')
         }
       ]
     },
     {
       path: 'following',
       name: 'Following',
-      component: () => import('../components/Popup/FollowsPopup.vue')
+      component: () => import('../components/Modal/FollowsModal.vue')
     }
   ]
 }

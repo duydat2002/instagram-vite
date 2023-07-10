@@ -55,11 +55,13 @@ const classes = computed(() => {
     :type="type"
     :disabled="isDisabled"
   >
-    <div v-if="isLoading" class="animate-spin">
-      <fa :icon="['fas', 'spinner']" />
+    <div v-if="isLoading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <fa class="animate-spin" :icon="['fas', 'spinner']" />
     </div>
 
-    <slot v-else :style="{ opacity: isLoading ? 0 : 1 }" />
+    <div :class="{ 'opacity-0': isLoading }">
+      <slot />
+    </div>
   </button>
 </template>
 

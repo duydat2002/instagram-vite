@@ -2,13 +2,19 @@
 import MoreUserIcon from '@icons/more-user.svg'
 import SettingIcon from '@icons/setting.svg'
 import UiButton from '@/components/Form/UiButton.vue'
+import FollowActionsPopup from '@/components/Popup/Profile/FollowActionsPopup.vue'
+import RestrictionPopup from '@/components/Popup/Profile/RestrictionPopup.vue'
 
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store'
+import { useFollow } from '@/composables'
 import { formatNumberToSuffix } from '@/helpers'
 
 const { user, currentUser } = storeToRefs(useUserStore())
+const isLoadingFollow = ref(false)
+const followActionsPopupActive = ref(false)
+const restrictionPopupActive = ref(false)
 
 const mutualFollowersComp = computed(() => {
   if (currentUser && user) {
@@ -22,6 +28,28 @@ const mutualFollowersComp = computed(() => {
   }
   return ''
 })
+
+const follow = async () => {
+  if (currentUser) {
+    const { setFollow } = useFollow()
+
+    isLoadingFollow.value = true
+    await setFollow(currentUser.value!.id, user.value!.id)
+    isLoadingFollow.value = false
+    user.value!.isCurrentUserFollowing = true
+  }
+}
+
+const unfollow = async () => {
+  if (currentUser) {
+    const { deleteFollow } = useFollow()
+
+    isLoadingFollow.value = true
+    await deleteFollow(currentUser.value!.id, user.value!.id)
+    isLoadingFollow.value = false
+    user.value!.isCurrentUserFollowing = false
+  }
+}
 </script>
 
 <template>
@@ -50,11 +78,30 @@ const mutualFollowersComp = computed(() => {
             >Chỉnh sửa trang cá nhân</UiButton
           >
           <template v-else>
-            <UiButton v-if="user?.isCurrentUserFollowing" class="ml-2" secondary>
+            <UiButton
+              v-if="user?.isCurrentUserFollowing"
+              class="ml-2"
+              secondary
+              :isDisabled="isLoadingFollow"
+              :isLoading="isLoadingFollow"
+              @click="
+                () => {
+                  followActionsPopupActive = true
+                }
+              "
+            >
               <span>Đang theo dõi</span>
               <fa class="text-xs ml-1" :icon="['fas', 'chevron-down']" />
             </UiButton>
-            <UiButton v-else class="ml-2" primary>Theo dõi</UiButton>
+            <UiButton
+              v-else
+              class="ml-2"
+              primary
+              :isDisabled="isLoadingFollow"
+              :isLoading="isLoadingFollow"
+              @click="follow"
+              >Theo dõi</UiButton
+            >
             <UiButton class="ml-2" secondary>Nhắn tin</UiButton>
             <UiButton class="ml-2" secondary>
               <MoreUserIcon />
@@ -109,15 +156,52 @@ const mutualFollowersComp = computed(() => {
         v-if="user?.mutualFollowers && mutualFollowersComp"
         class="mt-4 text-xs text-textColor-secondary"
       >
-        <router-link :to="{ name: 'MutualFollowers' }"
+        <RouterLink to="{ name: 'MutualFollowers' }"
           >Có
           <span class="text-textColor-primary font-medium">{{ mutualFollowersComp }}</span>
           <span v-if="user.mutualFollowers && user.mutualFollowers.length > 3">
             và {{ user.mutualFollowers.length - 3 }} người khác theo dõi</span
           >
-          theo dõi</router-link
-        >
+          theo dõi
+        </RouterLink>
       </div>
     </div>
+
+    <FollowActionsPopup
+      v-if="followActionsPopupActive"
+      :user="user!"
+      :onUnfollow="
+        () => {
+          followActionsPopupActive = false
+          unfollow()
+        }
+      "
+      :onClose="
+        () => {
+          followActionsPopupActive = false
+        }
+      "
+      :onClickOutside="
+        () => {
+          followActionsPopupActive = false
+        }
+      "
+      @open-restriction-popup="
+        () => {
+          followActionsPopupActive = false
+          restrictionPopupActive = true
+        }
+      "
+    />
+
+    <RestrictionPopup
+      v-if="restrictionPopupActive"
+      :user="user!"
+      :onClose="
+        () => {
+          restrictionPopupActive = false
+        }
+      "
+    />
   </div>
 </template>

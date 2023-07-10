@@ -4,8 +4,8 @@ import Modal from '@/components/Modal/Modal.vue'
 const emit = defineEmits(['confirm', 'cancel', 'click-outside'])
 withDefaults(
   defineProps<{
-    title: string
-    desc: string
+    title?: string
+    desc?: string
     confirmMessage: string
     cancelMessage?: string
   }>(),
@@ -30,8 +30,9 @@ const onClickOutside = () => {
   <Modal isPopup isShow @click-outside="onClickOutside">
     <div class="w-full max-w-[400px] bg-modal rounded-xl text-center overflow-hidden">
       <div class="p-8">
-        <span class="block text-xl">{{ title }}</span>
-        <span class="block text-textColor-secondary">{{ desc }}</span>
+        <span v-if="title" class="block text-xl">{{ title }}</span>
+        <span v-if="desc" class="block text-textColor-secondary">{{ desc }}</span>
+        <slot />
       </div>
       <div class="button active:bg-[#e5e5e5] font-bold text-error" @click="onConfirm">
         <span>{{ confirmMessage }}</span>

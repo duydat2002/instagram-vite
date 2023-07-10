@@ -24,11 +24,11 @@ export async function updateWithTransaction(
 
     const updatedDoc = await getDoc(docRef)
 
-    const updatedUser = {
+    const updatedData = {
       id: updatedDoc.id,
       ...updatedDoc.data()
     }
-    return updatedUser
+    return updatedData
   } catch (error) {
     console.log(error)
   }

@@ -6,8 +6,8 @@ import { useModalStore } from '@/store'
 const emit = defineEmits(['click-outside'])
 const props = withDefaults(
   defineProps<{
-    isPopup: boolean
-    isShow: boolean
+    isPopup?: boolean
+    isShow?: boolean
   }>(),
   {
     isPopup: false,
@@ -18,12 +18,7 @@ const props = withDefaults(
 const { scrollPosition, stopScroll } = storeToRefs(useModalStore())
 
 const handleClickOutsideModal = () => {
-  if (
-    (document.querySelector('#modal > div') && !document.querySelector('#popup > div')) ||
-    (!document.querySelector('#modal > div') && document.querySelector('#popup > div'))
-  ) {
-    emit('click-outside')
-  }
+  emit('click-outside')
 }
 
 onMounted(() => {

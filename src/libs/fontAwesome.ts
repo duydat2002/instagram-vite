@@ -16,7 +16,8 @@ import {
   faHeart,
   faComment,
   faCircleXmark,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faStar
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faSquareFacebook } from '@fortawesome/free-brands-svg-icons'
@@ -50,7 +51,8 @@ library.add(
   faComment,
   farComment,
   faBookmark,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faStar
 )
 
 export { FontAwesomeIcon }

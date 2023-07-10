@@ -6,7 +6,7 @@ import General from '@/components/Pages/Profile/General.vue'
 import Stories from '@/components/Molecules/Stories/Stories.vue'
 import Footer from '@/components/Layout/Footer.vue'
 
-import { onBeforeMount, nextTick } from 'vue'
+import { onBeforeMount, onBeforeUnmount, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import {
   RouterView,
@@ -16,13 +16,14 @@ import {
 } from 'vue-router'
 import { useUserStore } from '@/store'
 import { useUser } from '@/composables'
+import type { Unsubscribe } from 'firebase/auth'
 
+let unsubscribe: Unsubscribe
 const { user } = storeToRefs(useUserStore())
 
 onBeforeRouteUpdate(
   (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     if (from.params.username != to.params.username) {
-      console.log('onBeforeRouteUpdate')
       const { getUserByUsername } = useUser()
       getUserByUsername(to.params.username as string).then(async (user) => {
         if (!user) {
@@ -34,7 +35,10 @@ onBeforeRouteUpdate(
           })
         } else {
           const { initUserWithFollow } = useUserStore()
+          const { watchUserChange } = useUser()
+
           await initUserWithFollow(user)
+          unsubscribe = watchUserChange(user.id)
 
           document.title = `${user.fullname} (@${user.username}) | Instagram`
           next()
@@ -47,9 +51,15 @@ onBeforeRouteUpdate(
 )
 
 onBeforeMount(async () => {
+  const { watchUserChange } = useUser()
+  unsubscribe = watchUserChange(user.value!.id)
   nextTick(() => {
     document.title = `${user?.value?.fullname} (@${user?.value?.username}) | Instagram`
   })
+})
+
+onBeforeUnmount(() => {
+  unsubscribe()
 })
 </script>
 

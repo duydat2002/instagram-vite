@@ -7,6 +7,5 @@ declare interface PromiseFn<T = any, R = T> {
 }
 
 declare type Nullable<T> = T | null
-declare type Ref<T> = T | null
 
 // declare type PropType<T> = PropConstructor<T> | PropConstructor<T>[]

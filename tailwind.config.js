@@ -66,6 +66,9 @@ module.exports = {
         tablet: '768px',
         laptop: '1160px',
         desktop: '1264px'
+      },
+      transitionTimingFunction: {
+        ease1: 'cubic-bezier(0.08, 0.52, 0.52, 1)'
       }
     }
   },

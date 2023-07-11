@@ -4,6 +4,7 @@ import Logo from '@icons/logo.svg'
 import SearchPanel from './NavPanel/SearchPanel.vue'
 import NotifyPanel from './NavPanel/NotifyPanel.vue'
 import NavItem from './NavItem.vue'
+import NavBarMore from './NavBarMore.vue'
 
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -37,6 +38,11 @@ const handleCloseSearchPanel = () => {
 
 const handleNotifyClickOutside = () => {
   notifyPanelActive.value = false
+  currentNav.value = route.matched[0].name as NavTabEnum
+}
+
+const handleCloseBarPanel = () => {
+  barPanelActive.value = false
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
@@ -87,13 +93,14 @@ watch(
           @change-tab="changeTab"
         />
       </div>
-      <div class="hidden min-[768px]:block">
+      <div class="relative hidden min-[768px]:block">
         <NavItem
           :nav="tabBar"
           :current-user="currentUser"
           :current-nav="currentNav"
           @change-tab="changeTab"
         />
+        <NavBarMore v-if="barPanelActive" v-click-outside="handleCloseBarPanel" />
       </div>
     </div>
     <div class="fixed top-0 bottom-0 left-nav-narrow -z-10">

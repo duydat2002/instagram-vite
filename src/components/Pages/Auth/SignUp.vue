@@ -110,7 +110,9 @@ const handleCheckPassword = () => {
 </script>
 
 <template>
-  <div class="w-[350px] flex flex-col mt-3 max-[450px]:mt-0 max-[450px]:w-full">
+  <div
+    class="w-[350px] flex flex-col mt-3 max-[450px]:mt-0 max-[450px]:w-full no-dark text-textColor-primary"
+  >
     <div
       class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor max-[450px]:px-4 max-[450px]:border-none"
     >
@@ -195,7 +197,7 @@ const handleCheckPassword = () => {
     <div
       class="p-[25px] my-[10px] text-center border rounded-sm border-borderColor max-[450px]:border-none"
     >
-      <span class="">Bạn có tài khoản? </span>
+      <span>Bạn có tài khoản? </span>
       <RouterLink to="/accounts/login" class="font-semibold text-buttonColor-primary"
         >Đăng nhập</RouterLink
       >

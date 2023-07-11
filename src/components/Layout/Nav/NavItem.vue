@@ -22,7 +22,7 @@ const handleChangeTab = (nav: NavTabEnum) => {
 <template>
   <RouterLink
     :to="nav.path || ''"
-    class="nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
+    class="relative nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
     :class="{ active: currentNav == nav.name }"
     @click="handleChangeTab(nav.name)"
   >
@@ -46,5 +46,55 @@ const handleChangeTab = (nav: NavTabEnum) => {
       class="hidden min-[1264px]:block parent-[.isNarrow]:hidden min-w-max pl-4 text-base text-textColor-primary parent-[.nav-item.active]:font-bold"
       >{{ nav.title }}</span
     >
+    <div class="tooltip">
+      <div class="tooltip-content">{{ nav.title }}</div>
+    </div>
   </RouterLink>
 </template>
+
+<style scoped>
+.tooltip {
+  margin-left: 18px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 100%;
+  width: max-content;
+  border-radius: 8px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
+  transform: scale(0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.1s 0s;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.isNarrow .nav-item:hover .tooltip {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s cubic-bezier(0.09, 0.8, 0.52, 1.34) 0.5s;
+}
+
+.tooltip-content {
+  padding: 8px 12px;
+  color: var(--primary-text-color);
+  background: var(--tooltip-bg-color);
+  border-radius: 8px;
+}
+
+.tooltip-content::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
+  transform: translate(15px, -50%) rotateZ(45deg);
+  background: inherit;
+  border-radius: 2px;
+  z-index: -1;
+}
+</style>

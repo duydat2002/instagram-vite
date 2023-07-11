@@ -42,7 +42,9 @@ const submitLoginForm = async () => {
 </script>
 
 <template>
-  <div class="w-[350px] flex flex-col mt-3 max-[450px]:mt-0 max-[450px]:w-full">
+  <div
+    class="w-[350px] flex flex-col mt-3 max-[450px]:mt-0 max-[450px]:w-full no-dark text-textColor-primary"
+  >
     <div
       class="flex flex-col items-center py-5 px-10 border rounded-sm border-borderColor max-[450px]:px-4 max-[450px]:border-none"
     >

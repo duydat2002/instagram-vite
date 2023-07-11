@@ -15,7 +15,7 @@ import PlusActive from '@icons/plus-square-active.svg'
 import Bar from '@icons/bar.svg'
 import BarActive from '@icons/bar-active.svg'
 
-import { ref, watch, markRaw } from 'vue'
+import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore, useResizeStore } from '@/store'
 import { type INav, NavTabEnum } from '@/types'

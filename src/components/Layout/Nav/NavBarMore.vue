@@ -5,7 +5,9 @@ import BookmarkIcon from '@icons/bookmark.svg'
 import SunIcon from '@icons/sun.svg'
 import MoonIcon from '@icons/moon.svg'
 import ReportIcon from '@icons/report.svg'
+
 import UiSwitchButton from '@/components/Form/UiSwitchButton.vue'
+import LogoutPopup from '@/components/Popup/LogoutPopup.vue'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -16,14 +18,23 @@ import { useUserStore, useThemeStore } from '@/store'
 
 const router = useRouter()
 const tabActive = ref(false)
+const logoutPopupActive = ref(false)
 const { darkMode } = storeToRefs(useThemeStore())
 
 const logout = async () => {
   const { setCurrentUser } = useUserStore()
-  await signOut(auth)
-  setCurrentUser(null)
-  if (router.currentRoute.value.name == 'Home') router.go(0)
-  else router.push('/')
+  logoutPopupActive.value = true
+  const logoutTimeout = new Promise(() =>
+    setTimeout(() => {
+      setCurrentUser(null)
+      if (router.currentRoute.value.name == 'Home') router.go(0)
+      else router.push('/')
+    }, 5000)
+  )
+
+  await Promise.all([signOut(auth), logoutTimeout])
+
+  logoutPopupActive.value = false
 }
 </script>
 
@@ -92,6 +103,7 @@ const logout = async () => {
           <span class="leading-tight">Đăng xuất</span>
         </div>
       </div>
+      <LogoutPopup v-if="logoutPopupActive" />
     </div>
     <div
       class="absolute top-0 left-full parent-[.active]:left-0 w-full transition-[left] duration-200 ease-ease1"

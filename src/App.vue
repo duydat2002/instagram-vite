@@ -10,7 +10,7 @@ import type { Unsubscribe } from 'firebase/auth'
 
 useResize()
 const route = useRoute()
-const { stopScroll, scrollPosition } = storeToRefs(useModalStore())
+const { stopScroll } = storeToRefs(useModalStore())
 const { darkMode } = storeToRefs(useThemeStore())
 
 const loading = ref(true)

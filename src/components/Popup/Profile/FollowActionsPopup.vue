@@ -83,7 +83,7 @@ const openRestrictionPopup = () => {
         <fa class="text-textColor-secondary w-4" :icon="['fas', 'chevron-right']" />
       </div>
       <div
-        class="flex w-full p-4 hover:bg-[#e5e5e5] border-b border-separator-modal cursor-pointer select-none"
+        class="flex w-full p-4 hover:bg-[#e5e5e5] cursor-pointer select-none"
         @click="onUnfollow"
       >
         <span class="flex-grow mr-3 leading-tight">Bỏ theo dõi</span>

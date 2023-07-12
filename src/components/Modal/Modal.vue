@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useModalStore } from '@/store'
 

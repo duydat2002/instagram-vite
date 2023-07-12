@@ -3,12 +3,19 @@ import type { IUser } from '@/types'
 import ConfirmPopup from './ConfirmPopup.vue'
 import Avatar from '@/components/Atom/Avatar.vue'
 
-defineProps<{
-  user: IUser
-  onConfirm?: Fn<any, any>
-  onCancel?: Fn<any, any>
-  onClickOutside?: Fn<any, any>
-}>()
+withDefaults(
+  defineProps<{
+    user: IUser
+    onConfirm?: Fn<any, any>
+    onCancel?: Fn<any, any>
+    onClickOutside?: Fn<any, any>
+  }>(),
+  {
+    onConfirm: () => {},
+    onCancel: () => {},
+    onClickOutside: () => {}
+  }
+)
 </script>
 
 <template>

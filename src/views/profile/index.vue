@@ -98,6 +98,7 @@ onBeforeUnmount(() => {
         </router-link>
       </div>
       <RouterView></RouterView>
+      <RouterView name="modal"></RouterView>
     </div>
     <Footer />
   </div>

@@ -156,7 +156,7 @@ const unfollow = async () => {
         v-if="user?.mutualFollowers && mutualFollowersComp"
         class="mt-4 text-xs text-textColor-secondary"
       >
-        <RouterLink to="{ name: 'MutualFollowers' }"
+        <RouterLink :to="{ name: 'MutualFollowers' }"
           >Có
           <span class="text-textColor-primary font-medium">{{ mutualFollowersComp }}</span>
           <span v-if="user.mutualFollowers && user.mutualFollowers.length > 3">

@@ -1,10 +1,8 @@
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
-import BlankLayout from '@/layouts/BlankLayout.vue'
 
 import { useUserStore } from '@/store'
-import { useUser, useFollow } from '@/composables'
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import profile from './profile'
 
 export default [
@@ -53,4 +51,4 @@ export default [
     component: () => import('@/views/notFound.vue'),
     meta: { title: 'Không tìm thấy trang - Instagram', layout: AuthLayout }
   }
-]
+] as readonly RouteRecordRaw[]

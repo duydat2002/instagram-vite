@@ -1,6 +1,5 @@
 import routes from './routes'
 import { createRouter, createWebHistory } from 'vue-router'
-import { nextTick } from 'vue'
 
 import { useLoadingStore } from '@/store'
 import { auth } from '@/firebase'

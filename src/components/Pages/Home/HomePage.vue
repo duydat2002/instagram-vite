@@ -26,7 +26,7 @@ const home = () => {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex h-[1500px]">
     <div class="flex flex-col flex-grow">
       <div class="mt-10 cursor-pointer" @click="home">Home</div>
       <div class="mt-10 cursor-pointer" @click="logout">Logout</div>

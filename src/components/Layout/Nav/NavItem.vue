@@ -20,7 +20,8 @@ const handleChangeTab = (nav: NavTabEnum) => {
 </script>
 
 <template>
-  <RouterLink
+  <component
+    :is="nav.path ? 'RouterLink' : 'div'"
     :to="nav.path || ''"
     class="relative nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
     :class="{ active: currentNav == nav.name }"
@@ -49,7 +50,7 @@ const handleChangeTab = (nav: NavTabEnum) => {
     <div class="tooltip">
       <div class="tooltip-content">{{ nav.title }}</div>
     </div>
-  </RouterLink>
+  </component>
 </template>
 
 <style scoped>
@@ -74,7 +75,7 @@ const handleChangeTab = (nav: NavTabEnum) => {
   transform: scale(1);
   opacity: 1;
   visibility: visible;
-  transition: all 0.3s cubic-bezier(0.09, 0.8, 0.52, 1.34) 0.5s;
+  transition: all 0.3s cubic-bezier(0.09, 0.8, 0.52, 1.34) 1s;
 }
 
 .tooltip-content {

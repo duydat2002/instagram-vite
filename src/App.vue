@@ -10,7 +10,7 @@ import type { Unsubscribe } from 'firebase/auth'
 
 useResize()
 const route = useRoute()
-const { stopScroll } = storeToRefs(useModalStore())
+const { stopScroll, scrollPosition } = storeToRefs(useModalStore())
 const { darkMode } = storeToRefs(useThemeStore())
 
 const loading = ref(true)
@@ -20,6 +20,10 @@ watch(darkMode, (newTheme) => {
   if (newTheme) document.documentElement.classList.add('dark')
   else document.documentElement.classList.remove('dark')
 })
+
+// watch(stopScroll, (active) => {
+//   document.documentElement.style.overflow = active ? 'hidden' : 'visible'
+// })
 
 let unsubscribe: Unsubscribe
 onMounted(() => {
@@ -42,7 +46,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :class="{ 'active-overlay': stopScroll }">
+  <div class="has-[active-overlay]:overflow-y-scroll" :class="{ 'active-overlay': stopScroll }">
     <div v-if="loading || loadingUser" class="splash-screen fixed top-0 left-0 w-full h-full">
       <div class="logo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20">
         <img
@@ -64,6 +68,7 @@ onBeforeUnmount(() => {
         <Loading />
 
         <RouterView />
+        <RouterView name="modal1" />
       </Component>
     </KeepAlive>
   </div>

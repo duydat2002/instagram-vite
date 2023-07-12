@@ -21,21 +21,23 @@ const handleClickOutsideModal = () => {
   emit('click-outside')
 }
 
-onMounted(() => {
-  if (props.isShow) stopScroll.value = true
-  setTimeout(() => {
-    document.documentElement.scrollTop = scrollPosition.value
-  }, 0)
-})
+// onMounted(() => {
+//   console.log(document.documentElement.scrollTop);
+//   if (props.isShow) stopScroll.value = true
+//   setTimeout(() => {
+//     document.documentElement.scrollTop = scrollPosition.value
+//   }, 0)
+// })
 
-onUnmounted(() => {
-  if (!props.isPopup) {
-    stopScroll.value = false
-  }
-  setTimeout(() => {
-    document.documentElement.scrollTop = scrollPosition.value
-  }, 0)
-})
+// onUnmounted(() => {
+//   if (!props.isPopup) {
+//     stopScroll.value = false
+//   }
+//   setTimeout(() => {
+//     document.documentElement.scrollTop = scrollPosition.value
+//   }, 0)
+// })
+//
 </script>
 
 <template>

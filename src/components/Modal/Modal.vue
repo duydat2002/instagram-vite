@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onBeforeMount, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useModalStore } from '@/store'
 
@@ -21,23 +21,22 @@ const handleClickOutsideModal = () => {
   emit('click-outside')
 }
 
-// onMounted(() => {
-//   console.log(document.documentElement.scrollTop);
-//   if (props.isShow) stopScroll.value = true
-//   setTimeout(() => {
-//     document.documentElement.scrollTop = scrollPosition.value
-//   }, 0)
-// })
+onMounted(() => {
+  console.log(document.documentElement.scrollTop)
+  if (props.isShow) stopScroll.value = true
+  setTimeout(() => {
+    document.documentElement.scrollTop = scrollPosition.value
+  }, 0)
+})
 
-// onUnmounted(() => {
-//   if (!props.isPopup) {
-//     stopScroll.value = false
-//   }
-//   setTimeout(() => {
-//     document.documentElement.scrollTop = scrollPosition.value
-//   }, 0)
-// })
-//
+onUnmounted(() => {
+  if (!props.isPopup) {
+    stopScroll.value = false
+  }
+  setTimeout(() => {
+    document.documentElement.scrollTop = scrollPosition.value
+  }, 0)
+})
 </script>
 
 <template>

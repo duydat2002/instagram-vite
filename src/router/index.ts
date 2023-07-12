@@ -1,7 +1,7 @@
 import routes from './routes'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { useLoadingStore } from '@/store'
+import { useLoadingStore, useModalStore } from '@/store'
 import { auth } from '@/firebase'
 
 const router = createRouter({
@@ -13,7 +13,11 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { top: 0 }
+      if (to.name == from.name || to.matched[0] != from.matched[0]) {
+        return {
+          top: 0
+        }
+      }
     }
   }
 })
@@ -21,6 +25,9 @@ const router = createRouter({
 const authPath = ['/accounts/login', '/accounts/signup']
 
 router.beforeEach(async (to, from) => {
+  const { setScrollPosition } = useModalStore()
+  setScrollPosition(document.documentElement.scrollTop)
+
   const { startLoading } = useLoadingStore()
   startLoading()
   if (to.meta.requiresAuth && !auth.currentUser) {

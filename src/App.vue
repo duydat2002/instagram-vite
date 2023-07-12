@@ -21,9 +21,9 @@ watch(darkMode, (newTheme) => {
   else document.documentElement.classList.remove('dark')
 })
 
-// watch(stopScroll, (active) => {
-//   document.documentElement.style.overflow = active ? 'hidden' : 'visible'
-// })
+watch(stopScroll, (active) => {
+  document.documentElement.style.overflow = active ? 'hidden' : 'visible'
+})
 
 let unsubscribe: Unsubscribe
 onMounted(() => {

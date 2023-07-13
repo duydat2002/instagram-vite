@@ -8,4 +8,8 @@ declare interface PromiseFn<T = any, R = T> {
 
 declare type Nullable<T> = T | null
 
+declare interface DOMEvent<T = EventTarget> extends Event {
+  readonly target: T
+}
+
 // declare type PropType<T> = PropConstructor<T> | PropConstructor<T>[]

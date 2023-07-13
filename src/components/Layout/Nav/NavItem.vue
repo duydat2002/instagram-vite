@@ -23,7 +23,7 @@ const handleChangeTab = (nav: NavTabEnum) => {
   <component
     :is="nav.path ? 'RouterLink' : 'div'"
     :to="nav.path || ''"
-    class="relative nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover"
+    class="relative nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover select-none"
     :class="{ active: currentNav == nav.name }"
     @click="handleChangeTab(nav.name)"
   >

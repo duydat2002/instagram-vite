@@ -8,13 +8,16 @@ import RestrictionPopup from '@/components/Popup/Profile/RestrictionPopup.vue'
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store'
-import { useFollow } from '@/composables'
+import { useFollow, useUser, useStorage } from '@/composables'
 import { formatNumberToSuffix } from '@/helpers'
 
 const { user, currentUser } = storeToRefs(useUserStore())
 const isLoadingFollow = ref(false)
 const followActionsPopupActive = ref(false)
 const restrictionPopupActive = ref(false)
+
+const inputAvatar = ref<Nullable<HTMLInputElement>>(null)
+const isLoadingAvatar = ref(false)
 
 const mutualFollowersComp = computed(() => {
   if (currentUser && user) {
@@ -50,6 +53,26 @@ const unfollow = async () => {
     user.value!.isCurrentUserFollowing = false
   }
 }
+
+const hanldeClickChangeAvatar = () => {
+  inputAvatar.value?.click()
+}
+
+const getInputAvatar = async (event: Event) => {
+  if (currentUser.value) {
+    const file = (event.target as HTMLInputElement).files![0]
+    const fileName = file.name
+    console.log(file, fileName)
+
+    const { setAvatar } = useStorage()
+    const { updateAvatar } = useUser()
+
+    isLoadingAvatar.value = true
+    const urlAvatar = await setAvatar(currentUser.value.id, file)
+    if (urlAvatar) await updateAvatar(currentUser.value.id, urlAvatar)
+    isLoadingAvatar.value = false
+  }
+}
 </script>
 
 <template>
@@ -64,11 +87,21 @@ const unfollow = async () => {
           :src="user?.avatar"
           alt="Avatar"
         />
-        <button class="avatar-button" title="Thay đổi ảnh đại diện"></button>
+        <button
+          v-if="currentUser && user?.id == currentUser.id"
+          class="absolute top-0 left-0 w-full h-full"
+          title="Thay đổi ảnh đại diện"
+          @click="hanldeClickChangeAvatar"
+        />
       </div>
     </div>
     <form class="hidden" method="post" enctype="multipart/form-data">
-      <input ref="inputAvatar" accept="image/jpeg,image/png,image/jpg" type="file" />
+      <input
+        ref="inputAvatar"
+        accept="image/jpeg,image/png,image/jpg"
+        type="file"
+        @change="getInputAvatar"
+      />
     </form>
     <div class="flex flex-col flex-[2_1_0%]">
       <div class="flex items-center">

@@ -18,7 +18,7 @@ This project is still under development 🔥🔥🔥
 - Dark / light mode
 - Splash loading
 - Loading progress when change route
-- Loading user / currentUser after render
+- Loading user / currentUser before render
 
 ### Auth
 

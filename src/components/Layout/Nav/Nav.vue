@@ -68,7 +68,7 @@ watch(
     :class="{ isNarrow: isNarrowCom }"
   >
     <div
-      class="flex flex-row min-[768px]:flex-col h-full bg-bgColor-primary p-0 min-[768px]:px-3 min-[768px]:py-5 border-t min-[768px]:border-t-0 min-[768px]:border-r border-borderColor"
+      class="flex flex-row min-[768px]:flex-col h-full bg-bgColor-primary p-0 min-[768px]:px-3 min-[768px]:py-5 border-t min-[768px]:border-t-0 min-[768px]:border-r border-borderColor box-border"
     >
       <RouterLink
         to="/"
@@ -82,7 +82,7 @@ watch(
         />
       </RouterLink>
       <div
-        class="flex flex-row min-[768px]:flex-col flex-grow justify-center min-[768px]:justify-normal"
+        class="flex flex-row min-[768px]:flex-col flex-grow justify-evenly min-[768px]:justify-normal"
       >
         <NavItem
           v-for="nav in navs"

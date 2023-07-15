@@ -22,7 +22,7 @@ const handleClickLogin = () => {
         class="w-full p-4 hover:bg-[#e5e5e5] text-center cursor-pointer select-none"
         @click="handleClickLogin"
       >
-        <span class="mr-3 leading-tight">Đăng nhập</span>
+        <span class="leading-tight">Đăng nhập</span>
       </div>
     </div>
   </Modal>

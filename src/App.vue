@@ -4,7 +4,7 @@ import Loading from '@/components/Utils/Loading.vue'
 import { RouterView, useRoute } from 'vue-router'
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useModalStore, useUserStore, useThemeStore } from '@/store'
+import { useModalStore, useUserStore, useThemeStore, useResizeStore } from '@/store'
 import { useUser, useResize } from '@/composables'
 import type { Unsubscribe } from 'firebase/auth'
 
@@ -12,6 +12,7 @@ useResize()
 const route = useRoute()
 const { stopScroll } = storeToRefs(useModalStore())
 const { darkMode } = storeToRefs(useThemeStore())
+const { screen } = storeToRefs(useResizeStore())
 
 const loading = ref(true)
 const loadingUser = ref(true)
@@ -46,7 +47,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="has-[active-overlay]:overflow-y-scroll" :class="{ 'active-overlay': stopScroll }">
+  <div
+    class="has-[active-overlay]:overflow-y-scroll"
+    :class="[{ 'active-overlay': stopScroll }, screen]"
+  >
     <div v-if="loading || loadingUser" class="splash-screen fixed top-0 left-0 w-full h-full">
       <div class="logo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20">
         <img

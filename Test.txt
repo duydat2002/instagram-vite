@@ -1,0 +1,4 @@
+Khi hiện story trên newfeed: 
+  1. Chọn những story theo userId và isActive = true (Còn hiệu lực 24h kể từ lúc mới đăng)
+  2*. Kiểm tra những story (1) còn hiệu lực 24h không. Nếu không set isActive = false
+  3. Xử lí và hiển thị

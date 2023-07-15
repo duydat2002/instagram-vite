@@ -1,5 +1,5 @@
 import { auth, storage } from '@/firebase'
-import { ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytes, uploadString, getDownloadURL, deleteObject } from 'firebase/storage'
 
 export const useStorage = () => {
   const setAvatar = async (userId: string, file: File) => {
@@ -13,6 +13,14 @@ export const useStorage = () => {
       return url
     } catch (err) {
       console.log(err)
+    }
+  }
+
+  const deleteAvatar = async (userId: string) => {
+    try {
+      await deleteObject(ref(storage, `${userId}/avatar/${userId}.jpg`))
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -45,5 +53,5 @@ export const useStorage = () => {
     }
   }
 
-  return { setAvatar, uploadPosts }
+  return { setAvatar, deleteAvatar, uploadPosts }
 }

@@ -46,7 +46,10 @@ onUnmounted(() => {
       class="fixed top-0 left-0 right-0 bottom-0 flex flex-center bg-[#0000004d]"
       :class="isPopup ? 'z-50' : 'z-40'"
     >
-      <div class="m-5 flex flex-center" v-click-outside="handleClickOutsideModal">
+      <div
+        class="m-5 flex flex-center w-screen min-[500px]:w-auto"
+        v-click-outside="handleClickOutsideModal"
+      >
         <slot />
       </div>
     </div>

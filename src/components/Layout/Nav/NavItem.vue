@@ -23,14 +23,14 @@ const handleChangeTab = (nav: NavTabEnum) => {
   <component
     :is="nav.path ? 'RouterLink' : 'div'"
     :to="nav.path || ''"
-    class="relative nav-item flex items-center p-3 my-1 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-hover select-none"
+    class="relative nav-item group/nav-item flex items-center p-3 my-0 min-[768px]:my-[2px] min-[910px]:my-1 rounded-lg cursor-pointer transition-colors duration-300 min-[768px]:hover:bg-hover select-none"
     :class="{ active: currentNav == nav.name }"
     @click="handleChangeTab(nav.name)"
   >
     <component
       v-if="nav.name != NavTabEnum.Profile"
       :is="currentNav == nav.name ? nav.iconActive : nav.icon"
-      class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary"
+      class="w-6 flex-shrink-0 fill-textColor-primary text-textColor-primary transition-transform group-hover/nav-item:scale-105"
     />
     <div v-else class="w-6 h-6 relative flex-shrink-0">
       <Avatar
@@ -39,7 +39,7 @@ const handleChangeTab = (nav: NavTabEnum) => {
           'shadow-[inset_0_0_0_2px_#000]':
             currentNav == NavTabEnum.Profile && currentUser?.id == user?.id
         }"
-        width="34"
+        width="26"
         :avatar-url="currentUser?.avatar"
       />
     </div>

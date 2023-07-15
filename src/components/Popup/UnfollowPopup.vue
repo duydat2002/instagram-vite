@@ -26,7 +26,7 @@ withDefaults(
     @click-outside="onClickOutside"
   >
     <div class="flex flex-col flex-center">
-      <Avatar width="98" :avatar-url="user.avatar" />
+      <Avatar width="90" :avatar-url="user.avatar" />
       <span class="text-center mt-6"
         >Nếu đổi ý, bạn sẽ phải yêu cầu theo dõi lại @{{ user.username }}.</span
       >

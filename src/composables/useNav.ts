@@ -15,7 +15,7 @@ import PlusActive from '@icons/plus-square-active.svg'
 import Bar from '@icons/bar.svg'
 import BarActive from '@icons/bar-active.svg'
 
-import { watch } from 'vue'
+import { shallowRef, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore, useResizeStore } from '@/store'
 import { type INav, NavTabEnum } from '@/types'
@@ -90,13 +90,19 @@ export const useNav = () => {
     iconActive: BarActive
   }
 
-  let navs = NAVS
+  const navs = shallowRef<INav[]>([])
   const { screen } = storeToRefs(useResizeStore())
 
-  watch(screen, (newValue) => {
-    if (newValue == 'mobile') navs = NAVS_MOBILE
-    else navs = NAVS
-  })
+  watch(
+    screen,
+    (newValue) => {
+      if (newValue == 'mobile') navs.value = NAVS_MOBILE
+      else navs.value = NAVS
+    },
+    {
+      immediate: true
+    }
+  )
 
   return {
     navs,

@@ -1,19 +1,18 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 
-const props = defineProps({
-  width: [String, Number],
-  hasStory: {
-    type: Boolean,
-    default: false
-  },
-  avatarUrl: {
-    type: String,
-    // default:
-    //   'https://firebasestorage.googleapis.com/v0/b/instagram-f9ac5.appspot.com/o/defaultAvatar.jpg?alt=media&token=61fbdaa8-a6ed-419c-97e4-a95d2165ae64',
-    required: false
+const props = withDefaults(
+  defineProps<{
+    width?: string
+    hasStory?: boolean
+    avatarUrl?: string
+  }>(),
+  {
+    width: '38px',
+    hasStory: false,
+    avatarUrl: 'src/assets/images/defaultAvatar.jpg'
   }
-})
+)
 
 const loading = ref(true)
 
@@ -23,12 +22,10 @@ const hanldeLoad = () => {
 
 const sizeAvatar = computed(() => {
   let widthCom = props.width
-  // if (!props.hasStory) {
-  //   widthCom = Number(widthCom) + 4
-  // }
+  if (!!props.width && !isNaN(Number(props.width))) widthCom = widthCom + 'px'
   return {
-    width: widthCom + 'px',
-    height: widthCom + 'px'
+    width: `calc(${widthCom} + 8px)`,
+    height: `calc(${widthCom} + 8px)`
   }
 })
 </script>
@@ -39,7 +36,14 @@ const sizeAvatar = computed(() => {
       class="w-full h-full border-[2.5px] border-solid border-bgColor-primary rounded-full overflow-hidden"
     >
       <div v-if="loading" class="w-full h-full skeleton"></div>
-      <img v-show="!loading" :src="avatarUrl" alt="" @load="hanldeLoad" />
+      <img v-if="avatarUrl != ''" v-show="!loading" :src="avatarUrl" alt="" @load="hanldeLoad" />
+      <img
+        v-else
+        v-show="!loading"
+        src="@/assets/images/defaultAvatar.jpg"
+        alt=""
+        @load="hanldeLoad"
+      />
     </div>
   </div>
 </template>

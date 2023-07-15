@@ -59,7 +59,7 @@ onMounted(async () => {
 <template>
   <Modal isShow @click-outside="router.push({ name: 'Profile' })">
     <div
-      class="flex flex-col w-[400px] h-[calc(100vh-40px)] max-h-[400px] bg-modal rounded-xl overflow-hidden"
+      class="flex flex-col w-full max-w-[400px] h-[calc(100vh-40px)] max-h-[400px] bg-modal rounded-xl overflow-hidden"
     >
       <div class="relative h-[42px] flex flex-center border-b border-separator-modal">
         <span class="text-base font-semibold">Người theo dõi</span>

@@ -45,7 +45,7 @@ const onDeleteItem = (user: IUser) => {
         <div class="flex flex-grow overflow-hidden" @click="onClickItem(user)">
           <Avatar
             class="flex-shrink-0"
-            width="54"
+            width="45"
             :avatarUrl="user.avatar"
             :hasStory="Math.random() > 0.5"
           />

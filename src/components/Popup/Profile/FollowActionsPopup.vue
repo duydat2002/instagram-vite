@@ -31,7 +31,7 @@ const openRestrictionPopup = () => {
       class="flex flex-col flex-center w-screen max-w-[400px] bg-modal rounded-xl overflow-hidden"
     >
       <div class="relative w-full p-4 flex flex-col flex-center border-b border-separator-modal">
-        <Avatar width="64" :avatar-url="user.avatar" />
+        <Avatar width="58" :avatar-url="user.avatar" />
         <span class="font-semibold">{{ user.username }}</span>
         <div class="absolute top-1 right-2 p-2 cursor-pointer" @click="onClose">
           <CloseIcon />

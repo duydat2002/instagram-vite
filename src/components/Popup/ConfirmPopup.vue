@@ -34,24 +34,18 @@ const onClickOutside = () => {
         <span v-if="desc" class="block text-textColor-secondary">{{ desc }}</span>
         <slot />
       </div>
-      <div class="button active:bg-[#e5e5e5] font-bold text-error" @click="onConfirm">
+      <div
+        class="p-[13px] border-t border-separator-modal active:bg-[#e5e5e5] cursor-pointer select-none font-bold text-error"
+        @click="onConfirm"
+      >
         <span>{{ confirmMessage }}</span>
       </div>
-      <div class="button active:bg-[#e5e5e5]" @click="onCancel">
+      <div
+        class="p-[13px] border-t border-separator-modal active:bg-[#e5e5e5] cursor-pointer select-none"
+        @click="onCancel"
+      >
         <span>{{ cancelMessage }}</span>
       </div>
     </div>
   </Modal>
 </template>
-
-<style scoped>
-.button {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid var(--separator-modal-color);
-  cursor: pointer;
-  user-select: none;
-}
-</style>

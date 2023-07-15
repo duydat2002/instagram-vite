@@ -42,7 +42,7 @@ const unfollow = async () => {
 <template>
   <div class="flex items-center py-2 px-4">
     <RouterLink :to="{ name: 'Profile', params: { username: user.username } }" class="user-avatar">
-      <Avatar width="54" :avatarUrl="user.avatar" />
+      <Avatar width="45" :avatarUrl="user.avatar" />
     </RouterLink>
     <div class="flex flex-col flex-grow ml-3">
       <span class="font-semibold">

@@ -4,6 +4,7 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import { useUserStore } from '@/store'
 import type { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import profile from './profile'
+import post from './post'
 
 export default [
   {
@@ -27,6 +28,7 @@ export default [
     }
   },
   profile,
+  post,
   {
     path: '/explore',
     name: 'Explore',

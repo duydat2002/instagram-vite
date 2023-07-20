@@ -55,6 +55,7 @@ module.exports = {
         placeholder: 'var(--placeholder-color)'
       },
       width: {
+        '1/7': '14.28571%',
         'nav-narrow': 'var(--nav-narrow-width)',
         'nav-medium': 'var(--nav-medium-width)'
       },

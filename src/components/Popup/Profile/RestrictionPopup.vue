@@ -14,7 +14,7 @@ defineProps<{
 
 <template>
   <Modal isPopup isShow @click-outside="onClose">
-    <div class="w-full max-w-[400px] bg-modal rounded-xl text-center overflow-hidden">
+    <div class="w-screen max-w-[400px] bg-modal rounded-xl text-center overflow-hidden">
       <div class="flex flex-col p-6">
         <span class="text-xl mt-1 mb-5">Bạn gặp vấn đề với {{ user.username }} ư?</span>
         <div class="flex items-start mb-4">

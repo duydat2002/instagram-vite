@@ -47,8 +47,6 @@ const addStory = () => {
       <Swiper v-bind="options">
         <SwiperSlide v-for="n in 10" :key="n">
           <StoryItem :n="n" :avatarSize="imageSize" />
-          <!-- :username="'username' + n"
-            :image="'https://loremflickr.com/320/320?random=' + n" -->
         </SwiperSlide>
         <SwiperSlide v-if="hasAddStory">
           <div class="flex flex-col flex-center cursor-pointer" @click="addStory">

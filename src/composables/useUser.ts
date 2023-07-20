@@ -26,18 +26,45 @@ export const useUser = () => {
   } as IUser
 
   const getUser = async (userId: string) => {
-    const docSnap = await getDoc(doc(db, 'users', userId))
+    try {
+      const docSnap = await getDoc(doc(db, 'users', userId))
 
-    if (docSnap.exists()) {
-      user.value = {
-        id: docSnap.id,
-        ...docSnap.data()
-      } as IUser
-    } else {
-      user.value = null
+      if (docSnap.exists()) {
+        return {
+          id: docSnap.id,
+          ...docSnap.data()
+        } as IUser
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.log(error)
+      return null
     }
+  }
 
-    return user.value
+  const getUserWithCheckFollow = async (userId: string) => {
+    try {
+      const { currentUser } = useUserStore()
+      const { isFollowing } = useFollow()
+      const user = await getUser(userId)
+
+      if (user) {
+        const isCurrentUserFollowing = await isFollowing(currentUser!.id, user.id)
+        const isCurrentUserFollower = await isFollowing(user.id, currentUser!.id)
+
+        return {
+          ...user,
+          isCurrentUserFollowing,
+          isCurrentUserFollower
+        } as IUser
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 
   const getCurrentUser = async () => {
@@ -144,7 +171,7 @@ export const useUser = () => {
     await Promise.all(
       users.map(async (user: IUser) => {
         const isCurrentUserFollowing = await isFollowing(currentUser!.id, user.id)
-        const isCurrentUserFollower = await isFollowing(currentUser!.id, user.id)
+        const isCurrentUserFollower = await isFollowing(user.id, currentUser!.id)
 
         return {
           ...user,
@@ -195,6 +222,7 @@ export const useUser = () => {
   return {
     user,
     getUser,
+    getUserWithCheckFollow,
     getCurrentUser,
     watchUserChange,
     getUserWithQuery,

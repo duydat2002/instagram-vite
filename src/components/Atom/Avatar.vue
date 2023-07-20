@@ -9,8 +9,7 @@ const props = withDefaults(
   }>(),
   {
     width: '38px',
-    hasStory: false,
-    avatarUrl: 'src/assets/images/defaultAvatar.jpg'
+    hasStory: false
   }
 )
 

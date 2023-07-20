@@ -64,7 +64,7 @@ watch(
 
 <template>
   <div
-    class="fixed z-10 top-auto min-[768px]:top-0 bottom-0 min-[768px]:bottom-auto left-0 h-12 min-[768px]:h-screen w-full min-[1264px]:w-nav-medium min-[768px]:w-nav-narrow has-[isNarrow]:w-nav-narrow transition-[width] duration-300"
+    class="fixed z-30 top-auto min-[768px]:top-0 bottom-0 min-[768px]:bottom-auto left-0 h-12 min-[768px]:h-screen w-full min-[1264px]:w-nav-medium min-[768px]:w-nav-narrow has-[isNarrow]:w-nav-narrow transition-[width] duration-300"
     :class="{ isNarrow: isNarrowCom }"
   >
     <div

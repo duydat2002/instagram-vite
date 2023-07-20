@@ -213,7 +213,7 @@ const deleteAvatar = async () => {
               </UiButton>
               <UiButton
                 v-else
-                class="ml-2"
+                class="mr-2"
                 primary
                 :isDisabled="isLoadingFollow"
                 :isLoading="isLoadingFollow"

@@ -160,9 +160,25 @@ button {
   animation: 1.5s shine linear infinite;
 }
 
+/* === Animation === */
 @keyframes shine {
   to {
     background-position-x: -200%;
+  }
+}
+
+@keyframes like-button-animation {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
@@ -179,4 +195,16 @@ button {
 .fadeRight-leave-to {
   transform: translateX(-100%);
   opacity: 0;
+}
+
+/* === Swiper === */
+.swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: #fff !important;
+  opacity: 0.4;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
 }

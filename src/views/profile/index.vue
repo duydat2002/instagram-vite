@@ -129,6 +129,6 @@ onBeforeUnmount(() => {
       <RouterView></RouterView>
       <RouterView name="modal"></RouterView>
     </div>
-    <Footer />
+    <Footer class="hidden min-[736px]:block" />
   </div>
 </template>

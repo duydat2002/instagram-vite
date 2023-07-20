@@ -28,7 +28,7 @@ const onClickOutside = () => {
 
 <template>
   <Modal isPopup isShow @click-outside="onClickOutside">
-    <div class="w-full max-w-[400px] bg-modal rounded-xl text-center overflow-hidden">
+    <div class="w-screen max-w-[400px] bg-modal rounded-xl text-center overflow-hidden">
       <div class="p-8">
         <span v-if="title" class="block text-xl">{{ title }}</span>
         <span v-if="desc" class="block text-textColor-secondary">{{ desc }}</span>

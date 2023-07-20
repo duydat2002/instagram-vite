@@ -20,8 +20,8 @@ export interface IUserInfo {
 }
 
 export interface IUserFollowData {
-  isCurrentUserFollowing?: boolean
-  isCurrentUserFollower?: boolean
+  isCurrentUserFollowing?: boolean // CurrentUser follow User
+  isCurrentUserFollower?: boolean // User follow CurrentUser
   mutualFollowers?: IUser[]
 }
 

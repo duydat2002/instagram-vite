@@ -25,11 +25,21 @@ const router = createRouter({
 const authPath = ['/accounts/login', '/accounts/signup']
 
 router.beforeEach(async (to, from) => {
+  console.log('beforeEach')
+
   const { setScrollPosition } = useModalStore()
   setScrollPosition(document.documentElement.scrollTop)
 
-  const { startLoading } = useLoadingStore()
-  startLoading()
+  const { startLoading, startSplash } = useLoadingStore()
+  console.log(from, to)
+  if (from.name) {
+    console.log('Loading')
+    startLoading()
+  } else {
+    console.log('Splash')
+    startSplash()
+  }
+
   if (to.meta.requiresAuth && !auth.currentUser) {
     return '/accounts/login'
   } else {
@@ -43,8 +53,11 @@ router.beforeEach(async (to, from) => {
 
 router.afterEach((to, from) => {
   if (to.meta.title) document.title = (to.meta.title as string) || 'Instagram'
-  const { stopLoading } = useLoadingStore()
+  const { stopLoading, stopSplash } = useLoadingStore()
   stopLoading()
+  stopSplash()
+
+  console.log('afterEach')
 })
 
 export default router

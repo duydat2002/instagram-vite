@@ -27,7 +27,7 @@ import UiButton from '@/components/Form/UiButton.vue'
           <img class="w-full h-full" src="@/assets/images/FilterNormal.jpg" alt="" />
         </div>
       </div>
-      <span class="absolute bottom-0 left-0 right-0 px-5 py-4 text-xl text-white"
+      <span class="absolute bottom-0 left-0 right-0 px-5 py-4 text-xl text-white text-center"
         >Tất cả bài viết</span
       >
     </div>

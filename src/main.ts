@@ -14,6 +14,7 @@ let app: AppType<Element> | null = null
 onAuthStateChanged(auth, async () => {
   if (!app) {
     app = createApp(App)
+
     app.component('fa', FontAwesomeIcon)
     app.directive('click-outside', ClickOuside)
 

@@ -2,6 +2,8 @@
 
 This project is still under development 🔥🔥🔥
 
+https://instagram-vite-dat.netlify.app/
+
 ## Stack used
 
 1. Vue 3
@@ -9,7 +11,7 @@ This project is still under development 🔥🔥🔥
 3. Pinia
 4. Typescript
 5. Firebase
-6. Other - date-fns, some lodash functions, fontawesome,...
+6. Other - Swiper, some lodash functions, date-fns, fontawesome,...
 
 ## App Features
 
@@ -48,7 +50,11 @@ This project is still under development 🔥🔥🔥
 
 ### Post
 
--
+- Comment, reply with emoji
+- Use @ to tag, Automatically convert @ to link
+- Like posts, comment and reply
+- Smart time display
+- ...
 
 ### Other
 

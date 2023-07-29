@@ -3,7 +3,7 @@ import Loading from '@/components/Utils/Loading.vue'
 import Comment from '@/components/Molecules/Comment/Comment.vue'
 import CommentItem from '@/components/Molecules/Comment/CommentItem.vue'
 
-import { ref, computed, watch, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import { useComment } from '@/composables'
 import { storeToRefs } from 'pinia'
 import { usePostStore, useCommentStore } from '@/store'

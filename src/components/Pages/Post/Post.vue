@@ -6,6 +6,7 @@ import EllipsisIcon from '@icons/ellipsis.svg'
 import Avatar from '@/components/Atom/Avatar.vue'
 import EmojiPicker from '@/components/Molecules/Emoji/EmojiPicker.vue'
 import PostSwiper from './PostSwiper.vue'
+import PostHeader from './PostHeader.vue'
 import PostComments from './PostComments.vue'
 import PostActions from './PostActions.vue'
 
@@ -93,31 +94,7 @@ const handleComment = async () => {
       <div
         class="flex flex-col w-full min-[736px]:w-[335px] flex-shrink-0 border-l-0 min-[736px]:border-l border-borderColor"
       >
-        <div class="flex items-center justify-between border-b border-borderColor">
-          <div class="flex items-center p-[10px]">
-            <RouterLink :to="{name: 'Profile', params: {username: user!.username}}">
-              <Avatar width="32" :avatar-url="user!.avatar" />
-            </RouterLink>
-            <div class="ml-3 font-semibold leading-none">
-              <RouterLink :to="{name: 'Profile', params: {username: user!.username}}">
-                <span class="hover:opacity-60">{{ user!.username }}</span>
-              </RouterLink>
-              <template v-if="user!.id != currentUser?.id && user!.isCurrentUserFollowing">
-                <span class="mx-1">•</span>
-                <span class="hover:opacity-60 cursor-pointer">Đang theo dõi</span>
-              </template>
-              <template v-if="user!.id != currentUser?.id && !user!.isCurrentUserFollowing">
-                <span class="mx-1">•</span>
-                <span class="text-buttonColor-primary hover:text-link cursor-pointer"
-                  >Theo dõi</span
-                >
-              </template>
-            </div>
-          </div>
-          <div class="p-2 cursor-pointer">
-            <EllipsisIcon />
-          </div>
-        </div>
+        <PostHeader />
         <PostComments class="flex-grow border-b border-borderColor h-[200px] min-[736px]:h-auto" />
         <PostActions />
         <div

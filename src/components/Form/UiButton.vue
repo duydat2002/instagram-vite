@@ -86,11 +86,23 @@ button[secondary]:hover {
 
 .button--variant-text {
   font-weight: 600;
-  color: var(--primary-button-color);
-  background: transparent;
+  background: transparent !important;
 }
 .button--variant-text:hover {
-  color: var(--link-color);
+}
+
+.button--variant-text[primary] {
+  color: var(--primary-button-color);
+}
+.button--variant-text[primary]:hover {
+  color: var(--primary-button-hover-color);
+}
+
+.button--variant-text[secondary] {
+  color: #000;
+}
+.button--variant-text[secondary]:hover {
+  opacity: 0.6;
 }
 
 .button--variant-contained {

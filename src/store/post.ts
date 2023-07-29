@@ -21,6 +21,12 @@ export const usePostStore = defineStore('post', {
     increaseCommentCount() {
       this.post!.commentCount += 1
     },
+    increaseLikeCount() {
+      this.post!.likeCount += 1
+    },
+    decreaseLikeCount() {
+      this.post!.likeCount -= 1
+    },
     setUserPosts(posts: Nullable<IPost[]>) {
       this.userPosts = posts
     }

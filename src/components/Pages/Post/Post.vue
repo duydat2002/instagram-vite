@@ -1,11 +1,5 @@
 <script lang="ts" setup>
 import Loading from '@/components/Utils/Loading.vue'
-import LikeIcon from '@icons/heart.svg'
-import LikeActiveIcon from '@icons/heart-active.svg'
-import CommentIcon from '@icons/comment.svg'
-import SendIcon from '@icons/send.svg'
-import BookmarkIcon from '@icons/bookmark.svg'
-import BookmarkActiveIcon from '@icons/bookmark-active.svg'
 import EmojiIcon from '@icons/emoji.svg'
 import EllipsisIcon from '@icons/ellipsis.svg'
 
@@ -13,19 +7,17 @@ import Avatar from '@/components/Atom/Avatar.vue'
 import EmojiPicker from '@/components/Molecules/Emoji/EmojiPicker.vue'
 import PostSwiper from './PostSwiper.vue'
 import PostComments from './PostComments.vue'
+import PostActions from './PostActions.vue'
 
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore, usePostStore, useCommentStore } from '@/store'
-import { useComment, usePost } from '@/composables'
-import { dateDistanceToNow, convertToFullDate } from '@/helpers'
+import { useComment } from '@/composables'
 import type { ICommentPost, IReply } from '@/types'
-import type { Unsubscribe } from 'firebase/firestore'
 
 const { user, currentUser } = storeToRefs(useUserStore())
 const { post } = storeToRefs(usePostStore())
 const { comment, commentRef, replyTo } = storeToRefs(useCommentStore())
-const likeActive = ref(false)
 const emojiPickerActive = ref(false)
 const loadingComment = ref(false)
 
@@ -37,11 +29,6 @@ const postContainerWidth = computed(() => {
     return { maxWidth: Math.max(widthTemp, 480) + 'px' }
   }
 })
-
-const postCreatedAt = computed(() => dateDistanceToNow(post.value!.createdAt.toDate()))
-const fullCreatedAtComp = computed(() =>
-  convertToFullDate(post.value!.createdAt.toDate()).toUpperCase()
-)
 
 const handleClickEmoji = (emoji: string) => {
   if (commentRef.value) {
@@ -87,21 +74,12 @@ const handleComment = async () => {
       } as IReply)
     }
 
+    emojiPickerActive.value = false
     loadingComment.value = false
     commentRef.value!.value = ''
     comment.value = ''
   }
 }
-
-// let unsubscribe: Unsubscribe
-// onMounted(() => {
-//   const { watchPost } = usePost()
-//   unsubscribe = watchPost(post.value!.id)
-// })
-
-// onBeforeUnmount(() => {
-//   unsubscribe()
-// })
 </script>
 
 <template>
@@ -141,52 +119,7 @@ const handleComment = async () => {
           </div>
         </div>
         <PostComments class="flex-grow border-b border-borderColor h-[200px] min-[736px]:h-auto" />
-        <div class="flex flex-col border-b border-borderColor">
-          <div class="flex justify-between px-[10px] py-[6px]">
-            <div class="flex">
-              <div class="p-2 cursor-pointer select-none">
-                <LikeIcon
-                  v-if="!likeActive"
-                  class="w-6"
-                  @click="
-                    () => {
-                      likeActive = !likeActive
-                    }
-                  "
-                />
-                <LikeActiveIcon
-                  v-else
-                  class="w-6 text-error fill-error animate-[0.45s_like-button-animation_ease-in-out]"
-                  @click="
-                    () => {
-                      likeActive = !likeActive
-                    }
-                  "
-                />
-              </div>
-              <div class="p-2 cursor-pointer select-none">
-                <CommentIcon />
-              </div>
-              <div class="p-2 cursor-pointer select-none">
-                <SendIcon />
-              </div>
-            </div>
-            <div class="p-2 cursor-pointer select-none">
-              <BookmarkIcon v-if="true" class="w-6 h-6" />
-              <BookmarkActiveIcon v-else class="w-6 h-6" />
-            </div>
-          </div>
-          <div class="flex flex-col px-4 mb-4">
-            <span class="text-sm font-semibold"
-              >{{ post!.likeCount.toLocaleString('en-US').replace(',', '.') }} lượt thích</span
-            >
-            <span
-              class="text-[10px] uppercase text-textColor-secondary"
-              :title="fullCreatedAtComp"
-              >{{ postCreatedAt }}</span
-            >
-          </div>
-        </div>
+        <PostActions />
         <div
           v-if="currentUser"
           class="flex items-center pr-2 py-[6px]"

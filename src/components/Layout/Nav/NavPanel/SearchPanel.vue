@@ -7,7 +7,7 @@ import { debounce } from '@/helpers'
 import { useUser } from '@/composables'
 import { useUserStore } from '@/store'
 import { unionBy, remove } from 'lodash'
-import type { IUser } from '@/types'
+import type { IUser, IUserInfo } from '@/types'
 
 const isFocus = ref(false)
 const isLoading = ref(false)
@@ -38,7 +38,7 @@ const updateSearchHistory = async () => {
   const searchHistoryIds = searchHistory.value?.map((user) => user.id)
   await updateUser(currentUser!.id, {
     searchHistory: searchHistoryIds
-  })
+  } as IUserInfo)
 }
 
 const addSearchHistory = async (user: IUser) => {

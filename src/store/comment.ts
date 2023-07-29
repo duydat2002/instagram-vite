@@ -29,6 +29,14 @@ export const useCommentStore = defineStore('comment', {
       const index = findIndex(this.comments, (comment) => comment.id == commentId)
       this.comments![index].replyCount += 1
     },
+    increaseLikeCount(commentId: string) {
+      const index = findIndex(this.comments, (comment) => comment.id == commentId)
+      this.comments![index].likeCount += 1
+    },
+    decreaseLikeCount(commentId: string) {
+      const index = findIndex(this.comments, (comment) => comment.id == commentId)
+      this.comments![index].likeCount -= 1
+    },
     setReply(replyTo: string, replyUsername: string) {
       this.replyTo = replyTo
       this.comment = `@${replyUsername} `

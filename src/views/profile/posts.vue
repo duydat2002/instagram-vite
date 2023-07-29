@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import LoadingIcon from '@icons/loading.svg'
+import Loading from '@/components/Utils/Loading.vue'
 import UiButton from '@/components/Form/UiButton.vue'
 import PostReviewItem from '@/components/Pages/Post/PostReviewItem.vue'
 
@@ -31,11 +31,7 @@ onBeforeMount(async () => {
 
 <template>
   <div>
-    <div v-if="isLoading" class="mt-10 flex flex-center">
-      <div class="animate-spin">
-        <LoadingIcon class="w-8 h-8" />
-      </div>
-    </div>
+    <Loading v-if="isLoading" class="mt-10" />
     <template v-else>
       <div v-if="userPosts" class="flex flex-wrap -mx-[2px]">
         <PostReviewItem

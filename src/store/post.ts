@@ -15,6 +15,12 @@ export const usePostStore = defineStore('post', {
     setPost(post: Nullable<IPost>) {
       this.post = post
     },
+    updatePost(data: any) {
+      Object.assign(this.post!, data)
+    },
+    increaseCommentCount() {
+      this.post!.commentCount += 1
+    },
     setUserPosts(posts: Nullable<IPost[]>) {
       this.userPosts = posts
     }

@@ -15,14 +15,12 @@ export default {
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
-    console.log(to.params.postId)
     const { getUserWithCheckFollow } = useUser()
     const { getPost } = usePost()
     const { user } = storeToRefs(useUserStore())
     const { post } = storeToRefs(usePostStore())
 
     const postTemp = await getPost(to.params.postId as string)
-    console.log('Loaded post')
 
     if (!postTemp) {
       next({
@@ -36,7 +34,6 @@ export default {
 
       if (user.value?.id != postTemp?.userId) {
         user.value = await getUserWithCheckFollow(postTemp.userId)
-        console.log('User post')
       }
 
       next()

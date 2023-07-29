@@ -1,6 +1,16 @@
 import { db } from '@/firebase'
+import {
+  collection,
+  doc,
+  documentId,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where
+} from 'firebase/firestore'
+import { usePostStore } from '@/store'
 import type { IPost } from '@/types'
-import { collection, doc, documentId, getDoc, getDocs, query, where } from 'firebase/firestore'
 
 export const usePost = () => {
   const getPost = async (postId: string) => {
@@ -75,9 +85,24 @@ export const usePost = () => {
     }
   }
 
+  const watchPost = (postId: string) => {
+    const { setPost } = usePostStore()
+
+    return onSnapshot(doc(db, 'posts', postId), (doc) => {
+      if (doc.exists()) {
+        console.log('Post change', postId)
+        setPost({
+          id: doc.id,
+          ...doc.data()
+        } as IPost)
+      }
+    })
+  }
+
   return {
     getPost,
     getUserPosts,
-    getOtherUserPosts
+    getOtherUserPosts,
+    watchPost
   }
 }

@@ -14,27 +14,16 @@ import { useRouter } from 'vue-router'
 import { auth } from '@/firebase'
 import { signOut } from 'firebase/auth'
 import { storeToRefs } from 'pinia'
-import { useUserStore, useThemeStore } from '@/store'
+import { useUserStore, useThemeStore, useModalStore } from '@/store'
 
 const router = useRouter()
 const tabActive = ref(false)
-const logoutPopupActive = ref(false)
 const { darkMode } = storeToRefs(useThemeStore())
+const { logoutModalShow } = storeToRefs(useModalStore())
 
 const logout = async () => {
   const { setCurrentUser } = useUserStore()
-  logoutPopupActive.value = true
-  const logoutTimeout = new Promise(() =>
-    setTimeout(() => {
-      setCurrentUser(null)
-      if (router.currentRoute.value.name == 'Home') router.go(0)
-      else router.push('/')
-    }, 5000)
-  )
-
-  await Promise.all([signOut(auth), logoutTimeout])
-
-  logoutPopupActive.value = false
+  logoutModalShow.value = true
 }
 </script>
 
@@ -103,7 +92,7 @@ const logout = async () => {
           <span class="leading-tight">Đăng xuất</span>
         </div>
       </div>
-      <LogoutPopup v-if="logoutPopupActive" />
+      <LogoutPopup v-if="logoutModalShow" />
     </div>
     <div
       class="absolute top-0 left-full parent-[.active]:left-0 w-full transition-[left] duration-200 ease-ease1"

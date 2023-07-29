@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Loading from '@/components/Utils/Loading.vue'
+import LoadingProgress from '@/components/Utils/LoadingProgress.vue'
 import Splash from '@/components/Utils/Splash.vue'
 
 import { RouterView, useRoute } from 'vue-router'
@@ -33,18 +33,12 @@ watch(stopScroll, (active) => {
 
 let unsubscribe: Unsubscribe
 onMounted(() => {
-  console.log('App')
   const { watchUserChange } = useUser()
   const userStore = useUserStore()
 
   userStore.initCurrentUser().then(() => {
-    console.log('initCurrentUser')
     if (userStore.currentUser) unsubscribe = watchUserChange(userStore.currentUser.id)
   })
-
-  setTimeout(() => {
-    console.log('800ms')
-  }, 800)
 })
 
 onBeforeUnmount(() => {
@@ -60,7 +54,7 @@ onBeforeUnmount(() => {
     <Splash v-if="isLoadingSplash" />
     <KeepAlive>
       <Component :is="route.meta.layout || 'div'">
-        <Loading />
+        <LoadingProgress />
 
         <RouterView />
       </Component>

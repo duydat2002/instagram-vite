@@ -18,13 +18,6 @@ import type { IUser, IUserInfo } from '@/types'
 import { unionBy } from 'lodash'
 
 export const useUser = () => {
-  const currentUser = ref<IUser | null>(null)
-  const user = ref<IUser | null>(null)
-  currentUser.value = {
-    id: auth.currentUser?.uid,
-    ...auth.currentUser
-  } as IUser
-
   const getUser = async (userId: string) => {
     try {
       const docSnap = await getDoc(doc(db, 'users', userId))
@@ -50,14 +43,15 @@ export const useUser = () => {
       const user = await getUser(userId)
 
       if (user) {
-        const isCurrentUserFollowing = await isFollowing(currentUser!.id, user.id)
-        const isCurrentUserFollower = await isFollowing(user.id, currentUser!.id)
-
+        const [isCurrentUserFollowing, isCurrentUserFollower] = await Promise.all([
+          isFollowing(currentUser!.id, user.id),
+          isFollowing(user.id, currentUser!.id)
+        ])
         return {
           ...user,
           isCurrentUserFollowing,
           isCurrentUserFollower
-        } as IUser
+        }
       } else {
         return null
       }
@@ -73,22 +67,23 @@ export const useUser = () => {
   }
 
   const getUserWithQuery = async (field: string, condition: string, value: any) => {
-    const querySnapshot = await getDocs(
-      query(collection(db, 'users'), where(field, condition as WhereFilterOp, value))
-    )
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, 'users'), where(field, condition as WhereFilterOp, value))
+      )
 
-    if (querySnapshot.empty) {
-      user.value = null
-    } else {
-      querySnapshot.forEach((doc) => {
-        user.value = {
-          id: doc.id,
-          ...doc.data()
+      if (querySnapshot.empty) {
+        return null
+      } else {
+        return {
+          id: querySnapshot.docs[0].id,
+          ...querySnapshot.docs[0].data()
         } as IUser
-      })
+      }
+    } catch (error) {
+      console.log(error)
+      return null
     }
-
-    return user.value
   }
 
   const getUserByUsername = async (username: string) => {
@@ -220,7 +215,6 @@ export const useUser = () => {
   }
 
   return {
-    user,
     getUser,
     getUserWithCheckFollow,
     getCurrentUser,

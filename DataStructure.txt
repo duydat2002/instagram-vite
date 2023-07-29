@@ -6,26 +6,28 @@ Highlights(id, userId, title, stories[id])
 
   x  Insights(id, userId, followersCount, followingCount, postsCount)
 
-Stories(id, userId, content, likesCount, created_at)
+Stories(id, userId, content, likesCount, createdAt)
 
-Posts(id, userId, type{image, video, reel, multiple}, tags[id], caption, content(img/ vid), thumb, ratio(width:height), likesCount, commentCount, created_at)
+Posts(id, userId, type{image, video, reel, multiple}, tags[id], caption, content(img/ vid), thumb, ratio(width:height), likeCount, commentCount, createdAt)
 
-Comments(id, postId, storyId, userId, content, likesCount, replyCount, created_at)
+Comments(id, postId, storyId, userId, content, likeCount, replyCount, createdAt)
 
-Replies(id, commentId, userId, content, likesCount, createAt)
+Replies(id, commentId, repliedUserUsername, userId, content, likeCount, createdAt)
 
-Likes(id, userId, postId, storyId, commentId, replyId, created_at)
+PostLikes(id, userId, postId, createdAt)
+CommentLikes(id, userId, commentId, createdAt)
+ReplyLikes(id, userId, replyId, createdAt)
+StoryLikes(id, userId, storyId, createdAt)
 
-Messages(id, senderId, receiverId, content, created_at)
+Messages(id, senderId, receiverId, content, createdAt)
 
-Followers(id, followerId(Người theo dõi), followingId(Người được theo dõi), created_at)
+Followers(id, followerId(Người theo dõi), followingId(Người được theo dõi), createdAt)
 
-Notifications(id, userId, type[like, comment, follow], postId, senderId, read, created_at)
+Notifications(id, userId, type[like, comment, follow], postId, senderId, read, createdAt)
 
-Saved(id, userID, postId[], created_at)
+Saved(id, userID, postId[], createdAt)
 
 Explores(id, userId, postId[])
-
 
 
 // Storage

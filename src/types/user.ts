@@ -1,5 +1,5 @@
 export interface IUserInfo {
-  username?: string
+  username: string
   email?: string
   fullname?: string
   avatar?: string

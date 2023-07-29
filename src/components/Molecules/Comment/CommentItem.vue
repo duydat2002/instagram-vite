@@ -4,36 +4,66 @@ import LikeIcon from '@icons/heart.svg'
 import LikeActiveIcon from '@icons/heart-active.svg'
 import Avatar from '@/components/Atom/Avatar.vue'
 
-withDefaults(
+import { ref, computed, onBeforeMount } from 'vue'
+import { useUser } from '@/composables'
+import { useCommentStore } from '@/store'
+import { dateDistanceToNow, convertToFullDate, convertTagUser } from '@/helpers'
+import type { IUser } from '@/types'
+
+const props = withDefaults(
   defineProps<{
+    id?: string
+    commentId?: string
+    userId: string
+    content?: string
+    likeCount?: number
+    createdAt: any
     isCaption?: boolean
   }>(),
   {
     isCaption: false
   }
 )
+
+const user = ref<Nullable<IUser>>(null)
+
+const commentComp = computed(() => convertTagUser(props.content!))
+const createdTimeComp = computed(() => dateDistanceToNow(props.createdAt.toDate(), false, false))
+const fullCreatedAtComp = computed(() => convertToFullDate(props.createdAt.toDate()).toUpperCase())
+
+const handleReply = () => {
+  const { setReply } = useCommentStore()
+
+  setReply(props.commentId || props.id!, user.value?.username!)
+}
+
+onBeforeMount(async () => {
+  const { getUser } = useUser()
+
+  user.value = await getUser(props.userId)
+})
 </script>
 
 <template>
-  <div class="flex group/comment mb-4 mt-2">
+  <div v-if="content" class="flex group/comment mb-4 mt-2">
     <div class="">
-      <Avatar width="32" />
+      <Avatar width="32" :avatar-url="user?.avatar" />
     </div>
-    <div class="flex flex-col ml-3 mt-[2px]">
+    <div class="flex flex-grow flex-col ml-3 mt-[2px]">
       <div class="">
-        <RouterLink :to="{ name: 'Profile', params: { username: '123' } }">
-          <span class="font-semibold mr-1">duydat</span>
+        <RouterLink v-if="user" :to="{ name: 'Profile', params: { username: user.username } }">
+          <span class="font-semibold mr-1">{{ user.username }}</span>
         </RouterLink>
-        <span class="leading-tight"
-          >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas, eius?</span
-        >
+        <div class="inline-flex items-center">
+          <span class="leading-tight" v-html="commentComp"></span>
+        </div>
       </div>
       <div class="flex flex-wrap items-center mt-1 text-xs text-textColor-secondary">
-        <span class="mr-3 cursor-pointer" title="Tháng 6 10, 2023">2 tuần</span>
+        <span class="mr-3 cursor-pointer" :title="fullCreatedAtComp">{{ createdTimeComp }}</span>
         <template v-if="!isCaption">
-          <span class="font-semibold mr-3 cursor-pointer">1 lượt thích</span>
-          <span class="font-semibold mr-5 cursor-pointer">Trả lời</span>
-          <div class="relative w-4 h-4 hidden group-hover/comment:block cursor-pointer">
+          <span class="font-semibold mr-3 cursor-pointer">{{ likeCount }} lượt thích</span>
+          <span class="font-semibold mr-5 cursor-pointer" @click="handleReply">Trả lời</span>
+          <div class="relative w-4 h-4 invisible group-hover/comment:visible cursor-pointer">
             <EllipsisIcon
               class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-textColor-secondary fill-textColor-secondary"
             />

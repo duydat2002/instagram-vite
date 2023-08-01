@@ -22,14 +22,16 @@ const handleClickOutsideModal = () => {
 }
 
 onMounted(() => {
-  if (props.isShow) stopScroll.value = true
-  setTimeout(() => {
-    document.documentElement.scrollTop = scrollPosition.value
-  }, 0)
+  if (props.isShow) {
+    scrollPosition.value = document.documentElement.scrollTop
+    stopScroll.value = true
+  }
 })
 
 onUnmounted(() => {
-  stopScroll.value = false
+  if (!document.querySelector('#modal > div') && !document.querySelector('#popup > div')) {
+    stopScroll.value = false
+  }
   setTimeout(() => {
     document.documentElement.scrollTop = scrollPosition.value
   }, 0)

@@ -54,6 +54,7 @@ https://instagram-vite-dat.netlify.app/
 - Use @ to tag, Automatically convert @ to link
 - Like posts, comment and reply
 - Smart time display
+- Delete comment, reply
 - ...
 
 ### Other

@@ -25,9 +25,6 @@ const router = createRouter({
 const authPath = ['/accounts/login', '/accounts/signup']
 
 router.beforeEach(async (to, from) => {
-  const { setScrollPosition } = useModalStore()
-  setScrollPosition(document.documentElement.scrollTop)
-
   const { startLoading, startSplash } = useLoadingStore()
   if (from.name) {
     startLoading()

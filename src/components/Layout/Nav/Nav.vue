@@ -5,6 +5,7 @@ import SearchPanel from './NavPanel/SearchPanel.vue'
 import NotifyPanel from './NavPanel/NotifyPanel.vue'
 import NavItem from './NavItem.vue'
 import NavBarMore from './NavBarMore.vue'
+import CreatePostModal from '@/components/Modal/CreatePostModal.vue'
 
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -23,11 +24,13 @@ const currentNav = ref<NavTabEnum>(NavTabEnum.Home)
 const searchPanelActive = ref(false)
 const notifyPanelActive = ref(false)
 const barPanelActive = ref(false)
+const createPostActive = ref(false)
 
 const changeTab = (nav: NavTabEnum) => {
   searchPanelActive.value = nav == NavTabEnum.Search ? true : false
   notifyPanelActive.value = nav == NavTabEnum.Notification ? true : false
   barPanelActive.value = nav == NavTabEnum.Bar ? true : false
+  createPostActive.value = nav == NavTabEnum.CreatePost ? true : false
   currentNav.value = nav
 }
 
@@ -36,13 +39,18 @@ const handleCloseSearchPanel = () => {
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
-const handleNotifyClickOutside = () => {
+const handleCloseNotifyPanel = () => {
   notifyPanelActive.value = false
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
 const handleCloseBarPanel = () => {
   barPanelActive.value = false
+  currentNav.value = route.matched[0].name as NavTabEnum
+}
+
+const handleCloseCreatePost = () => {
+  createPostActive.value = false
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
@@ -112,8 +120,9 @@ watch(
         />
       </Transition>
       <Transition name="fadeRight">
-        <NotifyPanel v-if="notifyPanelActive" v-click-outside="handleNotifyClickOutside" />
+        <NotifyPanel v-if="notifyPanelActive" v-click-outside="handleCloseNotifyPanel" />
       </Transition>
     </div>
   </div>
+  <CreatePostModal v-if="createPostActive" :on-click-outside="handleCloseCreatePost" />
 </template>

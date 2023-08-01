@@ -16,6 +16,7 @@ import { useUserStore, usePostStore, useCommentStore } from '@/store'
 import type { ICommentLike, IPostLike, IReplyLike } from '@/types'
 
 export const useLike = () => {
+  // Post Likes
   const likePost = async (postId: string) => {
     try {
       const { currentUser } = storeToRefs(useUserStore())
@@ -89,6 +90,7 @@ export const useLike = () => {
     }
   }
 
+  // Comment Likes
   const likeComment = async (commentId: string) => {
     try {
       const { currentUser } = storeToRefs(useUserStore())
@@ -162,6 +164,7 @@ export const useLike = () => {
     }
   }
 
+  // Reply Likes
   const likeReply = async (replyId: string) => {
     try {
       const { currentUser } = storeToRefs(useUserStore())
@@ -230,6 +233,35 @@ export const useLike = () => {
     }
   }
 
+  //Delete Likes
+  const deleteLikes = async (nameCollection: string, nameField: string, id: string) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, nameCollection), where(nameField, '==', id))
+      )
+
+      const promises = querySnapshot.docs.map(async (snap) => {
+        await deleteDoc(doc(db, nameCollection, snap.id))
+      })
+
+      await Promise.all(promises)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deletePostLikes = async (postId: string) => {
+    await deleteLikes('postLikes', 'postId', postId)
+  }
+
+  const deleteCommentLikes = async (commentId: string) => {
+    await deleteLikes('commentLikes', 'commentId', commentId)
+  }
+
+  const deleteReplyLikes = async (replyId: string) => {
+    await deleteLikes('replyLikes', 'replyId', replyId)
+  }
+
   return {
     likePost,
     unlikePost,
@@ -239,6 +271,9 @@ export const useLike = () => {
     getCommentLike,
     likeReply,
     unlikeReply,
-    getReplyLike
+    getReplyLike,
+    deletePostLikes,
+    deleteCommentLikes,
+    deleteReplyLikes
   }
 }

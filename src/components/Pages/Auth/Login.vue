@@ -79,10 +79,12 @@ const submitLoginForm = async () => {
           <div class="separator-small bg-borderColor"></div>
         </div>
         <UiButton variant="text" class-props="max-[450px]:!p-0">
-          <div class="w-4 h-4 mr-2 inline-block">
-            <img src="@/assets/images/facebookIcon.png" alt="Logo Facebook" />
+          <div class="flex items-center">
+            <div class="w-4 h-4 mr-2 inline-block">
+              <img src="@/assets/images/facebookIcon.png" alt="Logo Facebook" />
+            </div>
+            <span class="text-link">Đăng nhập bằng Facebook</span>
           </div>
-          <span>Đăng nhập bằng Facebook</span>
         </UiButton>
         <p v-if="authError" class="text-sm text-error my-8">{{ authError }}</p>
         <RouterLink to="/" class="text-xs text-link mt-[13px]">

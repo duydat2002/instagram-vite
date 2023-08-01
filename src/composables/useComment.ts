@@ -11,7 +11,8 @@ import {
   where,
   orderBy,
   doc,
-  Timestamp
+  Timestamp,
+  deleteDoc
 } from 'firebase/firestore'
 import type { ICommentPost, IReply } from '@/types'
 
@@ -72,6 +73,34 @@ export const useComment = () => {
     }
   }
 
+  const deleteCommentPost = async (commentId: string) => {
+    try {
+      const { post } = usePostStore()
+      const { deleteComment } = useCommentStore()
+
+      deleteComment(commentId)
+
+      const [_, querySnapshot] = await Promise.all([
+        deleteDoc(doc(db, 'comments', commentId)),
+        getDocs(query(collection(db, 'replies'), where('commentId', '==', commentId)))
+      ])
+
+      const promises = querySnapshot.docs.map(async (replyDoc) => {
+        await deleteDoc(doc(db, 'replies', replyDoc.id))
+      })
+
+      const deletedCount = querySnapshot.docs.length ? querySnapshot.docs.length + 1 : 1
+      await Promise.all([
+        updateDoc(doc(db, 'posts', post!.id), {
+          commentCount: increment(-deletedCount)
+        }),
+        ...promises
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const addReply = async (reply: IReply) => {
     try {
       const { increaseReplyCount, resetReplyTo } = useCommentStore()
@@ -94,8 +123,6 @@ export const useComment = () => {
       console.log(error)
     }
   }
-
-  const convertTagComment = (comment: string) => {}
 
   const getReplies = async (commentId: string) => {
     try {
@@ -125,10 +152,32 @@ export const useComment = () => {
     }
   }
 
+  const deleteReply = async (commentId: string, replyId: string) => {
+    try {
+      const { post } = usePostStore()
+      const { decreaseReplyCount } = useCommentStore()
+
+      decreaseReplyCount(commentId)
+      await Promise.all([
+        deleteDoc(doc(db, 'replies', replyId)),
+        updateDoc(doc(db, 'comments', commentId), {
+          replyCount: increment(-1)
+        }),
+        updateDoc(doc(db, 'posts', post!.id), {
+          commentCount: increment(-1)
+        })
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return {
     addCommentPost,
     getCommentsPost,
+    deleteCommentPost,
     addReply,
-    getReplies
+    getReplies,
+    deleteReply
   }
 }

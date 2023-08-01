@@ -3,13 +3,14 @@ import EllipsisIcon from '@icons/ellipsis.svg'
 import LikeIcon from '@icons/heart.svg'
 import LikeActiveIcon from '@icons/heart-active.svg'
 import Avatar from '@/components/Atom/Avatar.vue'
+import ActionsPopup from '@/components/Popup/ActionsPopup.vue'
 
 import { ref, computed, onBeforeMount, onMounted } from 'vue'
-import { useLike, useUser } from '@/composables'
+import { useComment, useLike, useUser } from '@/composables'
 import { storeToRefs } from 'pinia'
 import { useCommentStore, useUserStore } from '@/store'
 import { dateDistanceToNow, convertToFullDate, convertTagUser } from '@/helpers'
-import type { ICommentLike, IReplyLike, IUser } from '@/types'
+import type { IAction, ICommentLike, IReplyLike, IUser } from '@/types'
 
 const props = withDefaults(
   defineProps<{
@@ -18,6 +19,8 @@ const props = withDefaults(
     userId: string
     content?: string
     likeCount?: number
+    postId?: string
+    replyCount?: number
     createdAt: any
     isCaption?: boolean
   }>(),
@@ -32,7 +35,41 @@ const like = ref<Nullable<ICommentLike | IReplyLike>>(null)
 const isLike = ref(false)
 const isLoadingLike = ref(false)
 const likeCountRef = ref(props.likeCount)
+const commentActionsPopup = ref(false)
 
+const commentActionsComp = computed(() => {
+  if (props.userId == currentUser.value?.id)
+    return [
+      {
+        title: 'Báo cáo',
+        classes: 'font-bold text-error'
+      },
+      {
+        title: 'Xóa',
+        classes: 'font-bold text-error',
+        action: () => deleteItem()
+      },
+      {
+        title: 'Hủy',
+        action: () => {
+          commentActionsPopup.value = false
+        }
+      }
+    ] as IAction[]
+  else
+    return [
+      {
+        title: 'Báo cáo',
+        classes: 'font-bold text-error'
+      },
+      {
+        title: 'Hủy',
+        action: () => {
+          commentActionsPopup.value = false
+        }
+      }
+    ]
+})
 const disabledLikeButtonComp = computed(() => {
   return isLoadingLike.value ? 'pointer-events-none' : 'pointer-events-auto'
 })
@@ -79,6 +116,18 @@ const handleUnlike = async () => {
   isLoadingLike.value = false
 }
 
+const deleteItem = async () => {
+  if (!props.commentId) {
+    // Is Comment
+    const { deleteCommentPost } = useComment()
+    await deleteCommentPost(props.id!)
+  } else {
+    // Is Reply
+    const { deleteReply } = useComment()
+    await deleteReply(props.commentId!, props.id!)
+  }
+}
+
 onBeforeMount(async () => {
   const { getUser } = useUser()
 
@@ -119,6 +168,11 @@ onMounted(async () => {
           <div class="relative w-4 h-4 invisible group-hover/comment:visible cursor-pointer">
             <EllipsisIcon
               class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-textColor-secondary fill-textColor-secondary"
+              @click="
+                () => {
+                  commentActionsPopup = true
+                }
+              "
             />
           </div>
         </template>
@@ -139,4 +193,13 @@ onMounted(async () => {
       />
     </div>
   </div>
+  <ActionsPopup
+    v-if="commentActionsPopup"
+    :actions="commentActionsComp"
+    :on-click-outside="
+      () => {
+        commentActionsPopup = false
+      }
+    "
+  />
 </template>

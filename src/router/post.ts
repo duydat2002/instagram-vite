@@ -9,7 +9,6 @@ export default {
   name: 'Post',
   component: () => import('@/views/post.vue'),
   meta: { layout: DashboardLayout, requiresAuth: true },
-  props: true,
   beforeEnter: async (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,

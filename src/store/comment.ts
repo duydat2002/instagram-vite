@@ -29,6 +29,10 @@ export const useCommentStore = defineStore('comment', {
       const index = findIndex(this.comments, (comment) => comment.id == commentId)
       this.comments![index].replyCount += 1
     },
+    decreaseReplyCount(commentId: string) {
+      const index = findIndex(this.comments, (comment) => comment.id == commentId)
+      this.comments![index].replyCount -= 1
+    },
     increaseLikeCount(commentId: string) {
       const index = findIndex(this.comments, (comment) => comment.id == commentId)
       this.comments![index].likeCount += 1
@@ -36,6 +40,12 @@ export const useCommentStore = defineStore('comment', {
     decreaseLikeCount(commentId: string) {
       const index = findIndex(this.comments, (comment) => comment.id == commentId)
       this.comments![index].likeCount -= 1
+    },
+    deleteComment(commentId: string) {
+      const index = this.comments!.findIndex((comment) => comment.id === commentId)
+      if (index !== -1) {
+        this.comments!.splice(index, 1)
+      }
     },
     setReply(replyTo: string, replyUsername: string) {
       this.replyTo = replyTo

@@ -8,12 +8,13 @@ import BookmarkActiveIcon from '@icons/bookmark-active.svg'
 
 import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { usePostStore } from '@/store'
+import { usePostStore, useCommentStore } from '@/store'
 import { useLike } from '@/composables'
 import { dateDistanceToNow, convertToFullDate } from '@/helpers'
 import type { IPostLike } from '@/types'
 
 const { post } = storeToRefs(usePostStore())
+const { commentRef } = storeToRefs(useCommentStore())
 const like = ref<Nullable<IPostLike>>(null)
 const isLike = ref(false)
 const isLoadingLike = ref(false)
@@ -43,6 +44,10 @@ const handleUnlikePost = async () => {
   isLoadingLike.value = false
 }
 
+const commentIconClick = () => {
+  commentRef.value?.focus()
+}
+
 onMounted(async () => {
   const { getPostLike } = useLike()
   like.value = await getPostLike(post.value!.id)
@@ -69,7 +74,7 @@ onMounted(async () => {
           />
         </div>
         <div class="p-2 cursor-pointer select-none">
-          <CommentIcon />
+          <CommentIcon @click="commentIconClick" />
         </div>
         <div class="p-2 cursor-pointer select-none">
           <SendIcon />

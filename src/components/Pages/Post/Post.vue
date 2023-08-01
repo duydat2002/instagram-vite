@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import Loading from '@/components/Utils/Loading.vue'
 import EmojiIcon from '@icons/emoji.svg'
-import EllipsisIcon from '@icons/ellipsis.svg'
-
-import Avatar from '@/components/Atom/Avatar.vue'
 import EmojiPicker from '@/components/Molecules/Emoji/EmojiPicker.vue'
 import PostSwiper from './PostSwiper.vue'
 import PostHeader from './PostHeader.vue'

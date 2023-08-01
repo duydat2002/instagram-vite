@@ -3,15 +3,76 @@ import EllipsisIcon from '@icons/ellipsis.svg'
 import Avatar from '@/components/Atom/Avatar.vue'
 import UiButton from '@/components/Form/UiButton.vue'
 import UnfollowPopup from '@/components/Popup/UnfollowPopup.vue'
+import ActionsPopup from '@/components/Popup/ActionsPopup.vue'
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useUserStore, usePostStore, useCommentStore } from '@/store'
+import { useUserStore } from '@/store'
 import { useFollow } from '@/composables'
+import type { IAction } from '@/types'
 
 const { user, currentUser } = storeToRefs(useUserStore())
 const isLoadingFollow = ref(false)
 const unfollowPopupActive = ref(false)
+const actionsPopupActive = ref(false)
+
+const userPostActions = computed(() => {
+  if (currentUser.value?.id == user.value!.id)
+    return [
+      {
+        title: 'Xóa',
+        classes: 'font-bold text-error',
+        action: () => {}
+      },
+      {
+        title: 'Chỉnh sửa'
+      },
+      {
+        title: 'Hiển thị lượt thích'
+      },
+      {
+        title: 'Tắt tính năng bình luận'
+      },
+      {
+        title: 'Chia sẻ lên...'
+      },
+      {
+        title: 'Sao chép liên kết'
+      },
+      {
+        title: 'Nhúng'
+      },
+      {
+        title: 'Hủy',
+        action: () => {
+          actionsPopupActive.value = false
+        }
+      }
+    ] as IAction[]
+  else
+    return [
+      {
+        title: 'Báo cáo',
+        classes: 'font-bold text-error'
+      },
+      {
+        title: 'Bỏ theo dõi',
+        classes: 'font-bold text-error',
+        action: () => {
+          unfollowPopupActive.value = true
+        }
+      },
+      {
+        title: 'Thêm vào mục ưa thích'
+      },
+      {
+        title: 'Hủy',
+        action: () => {
+          actionsPopupActive.value = false
+        }
+      }
+    ] as IAction[]
+})
 
 const follow = async () => {
   if (currentUser) {
@@ -78,7 +139,13 @@ const unfollow = async () => {
       </div>
     </div>
     <div class="p-2 cursor-pointer">
-      <EllipsisIcon />
+      <EllipsisIcon
+        @click="
+          () => {
+            actionsPopupActive = true
+          }
+        "
+      />
     </div>
   </div>
   <UnfollowPopup
@@ -93,6 +160,15 @@ const unfollow = async () => {
     :onClickOutside="
       () => {
         unfollowPopupActive = false
+      }
+    "
+  />
+  <ActionsPopup
+    v-if="actionsPopupActive"
+    :actions="userPostActions"
+    :on-click-outside="
+      () => {
+        actionsPopupActive = false
       }
     "
   />

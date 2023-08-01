@@ -1,41 +1,71 @@
 <script lang="ts" setup>
-import SettingIcon from '@icons/setting.svg'
 import BackIcon from '@icons/back.svg'
-import DownIcon from '@icons/down.svg'
-import MoreUserIcon from '@icons/more-user.svg'
 import Post from '@/components/Pages/Post/Post.vue'
 import PostReviewItem from '@/components/Pages/Post/PostReviewItem.vue'
 import Footer from '@/components/Layout/Footer.vue'
 
-import { ref, computed, onMounted } from 'vue'
-import { useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import {
+  useRouter,
+  onBeforeRouteUpdate,
+  type RouteLocationNormalized,
+  type NavigationGuardNext
+} from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/store'
-import { usePost } from '@/composables'
+import { usePostStore, useUserStore } from '@/store'
+import { usePost, useUser } from '@/composables'
 import type { IPost } from '@/types'
-
-const props = defineProps<{
-  postId: string
-}>()
 
 const router = useRouter()
 const { user, currentUser } = storeToRefs(useUserStore())
+const { post } = storeToRefs(usePostStore())
 const otherPosts = ref<Nullable<IPost[]>>(null)
 const isLoading = ref(true)
 
-const getPosts = async () => {
+const getPostFn = async (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) => {
+  const { getUserWithCheckFollow } = useUser()
+  const { getPost } = usePost()
+
+  const postTemp = await getPost(to.params.postId as string)
+
+  if (!postTemp) {
+    next({
+      name: 'NotFound',
+      params: { pathMatch: to.path.substring(1).split('/') },
+      query: to.query,
+      hash: to.hash
+    })
+  } else {
+    post.value = postTemp
+
+    if (user.value?.id != postTemp?.userId) {
+      user.value = await getUserWithCheckFollow(postTemp.userId)
+    }
+
+    next()
+  }
+}
+
+const getOtherPosts = async () => {
   const { getOtherUserPosts } = usePost()
   isLoading.value = true
-  otherPosts.value = await getOtherUserPosts(user.value!.id, props.postId)
+  otherPosts.value = await getOtherUserPosts(user.value!.id, post.value!.id)
   isLoading.value = false
 }
 
-onBeforeRouteUpdate(async () => {
-  await getPosts()
-})
+onBeforeRouteUpdate(
+  async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    await getPostFn(to, from, next)
+    await getOtherPosts()
+  }
+)
 
 onMounted(async () => {
-  await getPosts()
+  await getOtherPosts()
 })
 </script>
 

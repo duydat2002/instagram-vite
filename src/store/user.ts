@@ -33,8 +33,10 @@ export const useUserStore = defineStore('user', {
     async initUserWithFollow(user: IUser) {
       const { isFollowing, getMutualFollowers } = useFollow()
       if (this.currentUser && this.currentUser.id !== user.id) {
-        const isCurrentUserFollowing = await isFollowing(this.currentUser.id, user.id)
-        const mutualFollowers = await getMutualFollowers(user.id)
+        const [isCurrentUserFollowing, mutualFollowers] = await Promise.all([
+          isFollowing(this.currentUser.id, user.id),
+          getMutualFollowers(user.id)
+        ])
 
         user = {
           ...user,

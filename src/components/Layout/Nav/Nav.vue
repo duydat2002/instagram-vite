@@ -10,12 +10,13 @@ import CreatePostModal from '@/components/Modal/CreatePostModal.vue'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useUserStore, useResizeStore } from '@/store'
+import { useUserStore, useResizeStore, useModalStore, useCreatePostStore } from '@/store'
 import { NavTabEnum } from '@/types'
 import { useNav } from '@/composables'
 
 const { currentUser } = storeToRefs(useUserStore())
 const { screen } = storeToRefs(useResizeStore())
+const { modalCreatePostShow } = storeToRefs(useModalStore())
 const route = useRoute()
 
 const { navs, tabBar } = useNav()
@@ -24,13 +25,12 @@ const currentNav = ref<NavTabEnum>(NavTabEnum.Home)
 const searchPanelActive = ref(false)
 const notifyPanelActive = ref(false)
 const barPanelActive = ref(false)
-const createPostActive = ref(false)
 
 const changeTab = (nav: NavTabEnum) => {
   searchPanelActive.value = nav == NavTabEnum.Search ? true : false
   notifyPanelActive.value = nav == NavTabEnum.Notification ? true : false
   barPanelActive.value = nav == NavTabEnum.Bar ? true : false
-  createPostActive.value = nav == NavTabEnum.CreatePost ? true : false
+  modalCreatePostShow.value = nav == NavTabEnum.CreatePost ? true : false
   currentNav.value = nav
 }
 
@@ -50,7 +50,12 @@ const handleCloseBarPanel = () => {
 }
 
 const handleCloseCreatePost = () => {
-  createPostActive.value = false
+  const { setRemovePostPopupShow, setModalCreatePostShow } = useModalStore()
+  const { currentTab } = useCreatePostStore()
+
+  if (!['InitPost', 'UploadPost'].includes(currentTab)) setRemovePostPopupShow(true)
+  else setModalCreatePostShow(false)
+
   currentNav.value = route.matched[0].name as NavTabEnum
 }
 
@@ -124,5 +129,5 @@ watch(
       </Transition>
     </div>
   </div>
-  <CreatePostModal v-if="createPostActive" :on-click-outside="handleCloseCreatePost" />
+  <CreatePostModal v-if="modalCreatePostShow" :on-click-outside="handleCloseCreatePost" />
 </template>

@@ -202,6 +202,7 @@ export const useCreatePostStore = defineStore('createPost', {
     },
     resetCreatePost() {
       this.currentTab = 'InitPost'
+      this.title = 'Tạo bài viết mới'
       this.medias = []
       this.currentMedia = null
       this.currentRatio = '1:1'

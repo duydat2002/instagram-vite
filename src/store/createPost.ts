@@ -5,6 +5,7 @@ import { getImage, drawInitCanvas } from '@/helpers'
 interface IState {
   tabs: string[]
   currentTab: string
+  title: string
   medias: IMedia[]
   currentMedia: Nullable<IMedia>
   currentMediaIndex: number
@@ -54,6 +55,7 @@ export const useCreatePostStore = defineStore('createPost', {
   state: (): IState => ({
     tabs: ['InitPost', 'EditorPost', 'FilterPost', 'CaptionPost', 'UploadPost'],
     currentTab: 'InitPost',
+    title: 'Tạo bài viết mới',
     medias: [],
     currentMedia: null,
     currentMediaIndex: 0,
@@ -66,6 +68,9 @@ export const useCreatePostStore = defineStore('createPost', {
     caption: ''
   }),
   actions: {
+    setTitle(title: string) {
+      this.title = title
+    },
     setCurrentTab(tabName: string) {
       this.currentTab = tabName
     },
@@ -121,23 +126,15 @@ export const useCreatePostStore = defineStore('createPost', {
       }
     },
     nextMedia() {
-      const medias = this.medias
-      const currentMedia = this.currentMedia
-      const currentIndex = medias.findIndex((media) => {
-        return media.url == currentMedia?.url
-      })
-      if (currentIndex < medias.length - 1) {
-        this.currentMedia = this.medias[currentIndex + 1]
+      if (this.currentMediaIndex < this.medias.length - 1) {
+        this.currentMediaIndex += 1
+        this.currentMedia = this.medias[this.currentMediaIndex]
       }
     },
     prevMedia() {
-      const medias = this.medias
-      const currentMedia = this.currentMedia
-      const currentIndex = medias.findIndex((media) => {
-        return media.url == currentMedia?.url
-      })
-      if (currentIndex > 0) {
-        this.currentMedia = this.medias[currentIndex - 1]
+      if (this.currentMediaIndex > 0) {
+        this.currentMediaIndex -= 1
+        this.currentMedia = this.medias[this.currentMediaIndex]
       }
     },
     uploadMedias(files: FileList) {

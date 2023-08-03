@@ -1,7 +1,7 @@
 import routes from './routes'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { useLoadingStore, useModalStore } from '@/store'
+import { useLoadingStore } from '@/store'
 import { auth } from '@/firebase'
 
 const router = createRouter({

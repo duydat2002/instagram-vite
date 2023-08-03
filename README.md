@@ -11,7 +11,7 @@ https://instagram-vite-dat.netlify.app/
 3. Pinia
 4. Typescript
 5. Firebase
-6. Other - Swiper, some lodash functions, date-fns, fontawesome,...
+6. Other - Swiper, Vuedraggable, some lodash functions, date-fns, fontawesome,...
 
 ## App Features
 

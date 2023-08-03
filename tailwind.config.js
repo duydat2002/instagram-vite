@@ -46,6 +46,7 @@ module.exports = {
           red: 'rgb(255, 48, 64)',
           yellow: 'rgb(255, 214, 0)'
         },
+        overlay: 'rgba(26, 26, 26, 0.8)',
         thumb: 'var(--thumb-color)',
         link: 'var(--link-color)',
         error: 'var(--error-color)',
@@ -83,6 +84,9 @@ module.exports = {
       })
       matchVariant('parent', (value) => {
         return `${value} &`
+      })
+      matchVariant('pseudo', (value) => {
+        return `&::${value}`
       })
       addUtilities({
         '.flex-center': {

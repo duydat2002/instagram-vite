@@ -1,5 +1,6 @@
-import { db } from '@/firebase'
+import { auth, db } from '@/firebase'
 import {
+  addDoc,
   collection,
   doc,
   documentId,
@@ -7,12 +8,54 @@ import {
   getDocs,
   onSnapshot,
   query,
+  serverTimestamp,
+  setDoc,
   where
 } from 'firebase/firestore'
-import { usePostStore } from '@/store'
+import { usePostStore, useCreatePostStore } from '@/store'
 import type { IPost } from '@/types'
+import { useStorage } from '@/composables'
 
 export const usePost = () => {
+  const setPost = async () => {
+    try {
+      const { uploadPosts } = useStorage()
+      const { medias, caption, cropperSize } = useCreatePostStore()
+
+      const postRef = await addDoc(collection(db, 'posts'), {})
+      const postId = postRef.id
+
+      const dataUrls: string[] = []
+      medias.forEach((media) => {
+        dataUrls.push(media.canvas.toDataURL())
+      })
+      const urls = await uploadPosts(postId, dataUrls)
+
+      let type = 'image'
+      if (urls && urls.length > 1) {
+        type = 'multiple'
+      } else {
+        type = 'image'
+      }
+
+      const post = {
+        userId: auth.currentUser!.uid,
+        caption: caption,
+        contents: urls,
+        type,
+        likeCount: 0,
+        commentCount: 0,
+        tags: [],
+        ratio: cropperSize.width / cropperSize.height,
+        createdAt: serverTimestamp()
+      }
+
+      await setDoc(doc(db, 'posts', postId), post)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const getPost = async (postId: string) => {
     try {
       const docSnap = await getDoc(doc(db, 'posts', postId))
@@ -100,6 +143,7 @@ export const usePost = () => {
   }
 
   return {
+    setPost,
     getPost,
     getUserPosts,
     getOtherUserPosts,

@@ -105,6 +105,8 @@ const handleComment = async () => {
         >
           <div class="relative px-4 py-2">
             <EmojiIcon
+              width="24"
+              height="24"
               class="cursor-pointer"
               @click="
                 () => {
@@ -114,7 +116,7 @@ const handleComment = async () => {
             />
             <EmojiPicker
               v-if="emojiPickerActive"
-              class="absolute left-0 min-[380px]:left-4 bottom-full mb-[7px]"
+              class="absolute left-0 min-[380px]:left-4 min-[380px]:w-[315px] bottom-full mb-[7px]"
               @clicked="handleClickEmoji"
             />
           </div>

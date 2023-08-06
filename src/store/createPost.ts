@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { ISize, IMedia, IAdjust, IFilters } from '@/types'
 import { getImage, drawInitCanvas } from '@/helpers'
+import { DEFAULT_ADJUST, DEFAULT_FILTER } from './../constants/filter'
 
 interface IState {
   tabs: string[]
@@ -11,20 +12,9 @@ interface IState {
   currentMediaIndex: number
   currentRatio: string
   containerSize: ISize
+  cropperSize: ISize
   filter: IFilters
   caption: string
-}
-
-const defaultAdjust: IAdjust = {
-  brightness: 0,
-  contrast: 0,
-  saturate: 0,
-  blur: 0,
-  grayscale: 0,
-  sepia: 0,
-  'hue-rotate': 0,
-  temperature: 0,
-  blurBorder: 0
 }
 
 const defaultMedia = {
@@ -44,10 +34,10 @@ const defaultMedia = {
     background: '',
     filter: ''
   },
-  adjust: defaultAdjust,
+  adjust: DEFAULT_ADJUST,
   filterTemplate: {
     name: 'Normal',
-    filter: defaultAdjust
+    filter: DEFAULT_FILTER
   }
 }
 
@@ -61,6 +51,10 @@ export const useCreatePostStore = defineStore('createPost', {
     currentMediaIndex: 0,
     currentRatio: '1:1',
     containerSize: {
+      height: 0,
+      width: 0
+    },
+    cropperSize: {
       height: 0,
       width: 0
     },
@@ -80,11 +74,20 @@ export const useCreatePostStore = defineStore('createPost', {
     addMedia(media: IMedia) {
       this.medias.push(media)
     },
-    updateMedia(payload: { index: number; newMedia: IMedia }) {
+    updateMedia1(payload: { index: number; newMedia: IMedia }) {
       const { index, newMedia } = payload
       if (index != -1) {
         this.medias.splice(index, 1, newMedia)
         this.currentMedia = newMedia
+      }
+    },
+    updateMedia(payload: { index: number; data: IMedia }) {
+      const { index, data } = payload
+      if (index != -1) {
+        Object.assign(this.medias[index], data)
+        Object.assign(this.currentMedia!, data)
+        // this.medias.splice(index, 1, newMedia)
+        // this.currentMedia = newMedia
       }
     },
     deleteMedia(mediaIndex: number) {

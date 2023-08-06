@@ -4,6 +4,7 @@ import Modal from './Modal.vue'
 import UiButton from '../Form/UiButton.vue'
 import InitPost from '@/components/Pages/CreatePost/InitPost.vue'
 import EditorPost from '@/components/Pages/CreatePost/EditorPost.vue'
+import UploadPost from '@/components/Pages/CreatePost/UploadPost.vue'
 import RemovePopup from '@/components/Popup/RemovePopup.vue'
 
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
@@ -95,10 +96,14 @@ onBeforeUnmount(() => {
 
 <template>
   <Modal isShow @click-outside="onClickOutside">
-    <div class="flex flex-col w-screen max-w-[400px] bg-modal rounded-xl overflow-hidden">
-      <div class="relative flex items-center justify-between h-[42px] border-b border-borderColor">
+    <div
+      class="flex flex-col flex-nowrap w-full h-[calc(100vh-40px)] max-h-[442px] bg-modal rounded-xl overflow-hidden select-none"
+    >
+      <div
+        class="relative flex items-center justify-between h-[42px] border-b border-separator-modal"
+      >
         <div v-if="isShowButton" class="ml-2 p-2 cursor-pointer select-none" @click="handlePrevTab">
-          <ArrowBackIcon />
+          <ArrowBackIcon class="text-textColor-primary fill-textColor-primary" />
         </div>
         <span
           class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-base font-semibold whitespace-nowrap"
@@ -112,6 +117,7 @@ onBeforeUnmount(() => {
       </div>
       <div class="max-h-[400px] h-screen">
         <InitPost v-if="currentTab == 'InitPost'" />
+        <UploadPost v-else-if="currentTab == 'UploadPost'" />
         <EditorPost v-else />
       </div>
     </div>

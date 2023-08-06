@@ -6,15 +6,20 @@ export interface IFilters {
 }
 
 export interface IAdjust {
-  brightness: number
-  contrast: number
-  saturate: number
-  blur: number
-  grayscale: number
-  sepia: number
-  'hue-rotate': number
-  temperature: number
-  blurBorder: number
+  brightness?: number
+  contrast?: number
+  saturate?: number
+  blur?: number
+  grayscale?: number
+  sepia?: number
+  'hue-rotate'?: number
+  temperature?: number
+  // blurBorder: number
+}
+
+export interface IFilterTemplate {
+  name: string
+  filter: any
 }
 
 export interface IMedia {

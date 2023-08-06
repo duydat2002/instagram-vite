@@ -8,6 +8,8 @@ import GlassPlusIcon from '@icons/glass-plus.svg'
 import LayerIcon from '@icons/layer.svg'
 
 import ListPost from './ListPost.vue'
+import FilterPost from './FilterPost.vue'
+import CaptionPost from './CaptionPost.vue'
 
 import { ref, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -19,10 +21,16 @@ const containerRef = ref<Nullable<HTMLDivElement>>(null)
 const cropperRef = ref<Nullable<HTMLDivElement>>(null)
 const imageRef = ref<Nullable<HTMLDivElement>>(null)
 const scaleRef = ref<Nullable<HTMLInputElement>>(null)
-const { medias, currentMedia, currentMediaIndex, currentRatio, currentTab, containerSize } =
-  storeToRefs(useCreatePostStore())
+const {
+  medias,
+  currentMedia,
+  currentMediaIndex,
+  currentRatio,
+  currentTab,
+  containerSize,
+  cropperSize
+} = storeToRefs(useCreatePostStore())
 const scaleValue = ref(1)
-const cropperSize = ref<ISize>({ width: 0, height: 0 })
 const reviewImageSize = ref<ISize>({ width: 0, height: 0 })
 const translatePosition = ref<IPoint>({ x: 0, y: 0 })
 const mousePosition = ref<IPoint>({ x: 0, y: 0 })
@@ -68,7 +76,7 @@ const handleChangeScale = () => {
       scale: scaleValue.value
     }
 
-    updateMedia({ index: currentMediaIndex.value, newMedia: media as IMedia })
+    updateMedia({ index: currentMediaIndex.value, data: media as IMedia })
   })
 }
 
@@ -103,7 +111,7 @@ const mouseUpImage = () => {
       translate: { ...translatePosition.value }
     }
 
-    updateMedia({ index: currentMediaIndex.value, newMedia: media as IMedia })
+    updateMedia({ index: currentMediaIndex.value, data: media as IMedia })
   })
 }
 
@@ -213,12 +221,15 @@ const handleNextMedia = () => {
   nextMedia()
 }
 
-watch(currentMedia, (newMedia) => {
-  scaleValue.value = newMedia!.scale
-  translatePosition.value = { ...newMedia!.translate }
+watch(
+  () => currentMedia.value!.url,
+  () => {
+    scaleValue.value = currentMedia.value!.scale
+    translatePosition.value = { ...currentMedia.value!.translate }
 
-  stick()
-})
+    stick()
+  }
+)
 
 watch(isDragging, () => {
   if (isDragging.value) {
@@ -284,12 +295,12 @@ onMounted(() => {
         </div>
         <div
           v-if="medias.length > 1"
-          class="absolute flex left-1/2 -translate-x-1/2 bottom-[30px] z-[1]"
+          class="absolute flex left-1/2 -translate-x-1/2 bottom-[30px] pointer-events-none z-[1]"
         >
           <div
             v-for="media in medias"
             :key="media.url"
-            :class="['w-[6px] h-[6px] bg-borderColor-dark has-[active]:bg-bgColor-primary rounded-full mx-[2px] transition-colors duration-200 ease-in-out', { active: media.url == currentMedia!.url }]"
+            :class="['w-[6px] h-[6px] bg-borderColor-dark has-[active]:bg-bgColor-primary dark:has-[active]:bg-buttonColor-primary rounded-full mx-[2px] transition-colors duration-200 ease-in-out', { active: media.url == currentMedia!.url }]"
           ></div>
         </div>
         <div
@@ -448,7 +459,15 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class=""></div>
+    <transition name="slideRight">
+      <div
+        v-if="['FilterPost', 'CaptionPost'].includes(currentTab)"
+        class="border-l border-borderColor overflow-hidden"
+      >
+        <FilterPost v-if="currentTab == 'FilterPost'" @drawCanvas="drawCanvas" />
+        <CaptionPost v-if="currentTab == 'CaptionPost'" />
+      </div>
+    </transition>
   </div>
 </template>
 

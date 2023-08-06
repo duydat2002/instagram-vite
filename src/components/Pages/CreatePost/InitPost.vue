@@ -62,8 +62,8 @@ const handleDrop = (event: DragEvent) => {
       class="w-full h-full flex flex-col flex-center"
       enctype="multipart/form-data"
     >
-      <MediafileIcon v-if="!isError" />
-      <ExclamationIcon v-else />
+      <MediafileIcon v-if="!isError" class="text-textColor-primary fill-textColor-primary" />
+      <ExclamationIcon v-else class="text-textColor-primary fill-textColor-primary" />
       <span class="text-xl mt-[10px]">Kéo ảnh và video vào đây</span>
       <span v-if="isError" class="text-sm text-textColor-secondary text-center mt-1">
         <span class="font-semibold">{{ fileErrorName }}</span>

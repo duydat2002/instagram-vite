@@ -131,6 +131,11 @@ button {
   border: none;
 }
 
+input,
+textarea {
+  background: transparent;
+}
+
 input::file-selector-button,
 button {
   cursor: pointer;
@@ -208,6 +213,19 @@ button {
 .fadeUp-enter-from,
 .fadeUp-leave-to {
   transform: translateY(16px);
+  opacity: 0;
+}
+
+.slideRight-enter-active,
+.slideRight-leave-active {
+  max-width: 340px;
+  opacity: 1;
+  transition: all 180ms linear;
+}
+
+.slideRight-enter-from,
+.slideRight-leave-to {
+  max-width: 0px;
   opacity: 0;
 }
 

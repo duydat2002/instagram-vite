@@ -9,10 +9,10 @@ const onClickEmojiItem = (emoji: string) => {
 </script>
 
 <template>
-  <div class="">
-    <div
-      class="w-[calc(100vw-60px)] min-[380px]:w-[315px] h-[320px] p-2 overflow-y-auto bg-white text-textColor-secondary drop-shadow-[0_0_7px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden z-10"
-    >
+  <div
+    class="w-[calc(100vw-60px)] h-[320px] bg-white text-textColor-secondary drop-shadow-[0_0_7px_rgba(0,0,0,0.1)] z-10 rounded-lg"
+  >
+    <div class="w-full h-full p-2 rounded-lg overflow-y-auto overflow-hidden">
       <div v-for="emojiType in EMOJI" :key="emojiType.label" class="mt-4 first:mt-0 flex flex-col">
         <div class="m-2 text-left font-semibold">
           {{ emojiType.label }}

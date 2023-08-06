@@ -6,10 +6,12 @@ const props = withDefaults(
     width?: string
     hasStory?: boolean
     avatarUrl?: string
+    borderColor?: string
   }>(),
   {
     width: '38px',
-    hasStory: false
+    hasStory: false,
+    borderColor: 'border-bgColor-primary'
   }
 )
 
@@ -31,9 +33,7 @@ const sizeAvatar = computed(() => {
 
 <template>
   <div class="container" :class="{ hasStory }" :style="sizeAvatar">
-    <div
-      class="w-full h-full border-[2.5px] border-solid border-bgColor-primary rounded-full overflow-hidden"
-    >
+    <div class="w-full h-full border-[2.5px] rounded-full overflow-hidden" :class="borderColor">
       <div v-if="loading" class="w-full h-full skeleton"></div>
       <img v-if="avatarUrl != ''" v-show="!loading" :src="avatarUrl" alt="" @load="hanldeLoad" />
       <img

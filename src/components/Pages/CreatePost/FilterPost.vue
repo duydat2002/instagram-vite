@@ -206,7 +206,7 @@ onMounted(() => {
         <AdjustInput
           v-for="input in adjustInputs"
           :key="input.title"
-          :title="input.name"
+          :title="input.title"
           :min="input.min"
           v-model:value="adjust[input.name as keyof IAdjust]"
           @change="handleChangeAdjust"

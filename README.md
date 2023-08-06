@@ -59,7 +59,15 @@ https://instagram-vite-dat.netlify.app/
 
 ### Create Post
 
--
+- Upload multiple images larger than 5kb in size
+- Choose ratio: original, 1:1, 4:5 or 16:9
+- Resize and crop photos
+- Select available filters or adjust images freely
+- Write captions with emojis no more than 2200 characters
+- Upload and edit videos (Expected)
+- Automatic tagging in captions (Expected)
+- Reponsive (Expected)
+- ...
 
 ### Other
 

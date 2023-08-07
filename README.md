@@ -55,6 +55,7 @@ https://instagram-vite-dat.netlify.app/
 - Like posts, comment and reply
 - Smart time display
 - Delete comment, reply
+- See users who liked posts, comment or reply
 - ...
 
 ### Create Post

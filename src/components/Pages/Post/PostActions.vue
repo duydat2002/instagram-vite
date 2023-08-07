@@ -48,6 +48,16 @@ const commentIconClick = () => {
   commentRef.value?.focus()
 }
 
+const handleClickLikedPost = async () => {
+  const { setLikedListModal, setIsLoadingLikedList, setLikedList } = usePostStore()
+  const { getLikedUsers } = useLike()
+
+  setLikedListModal(true)
+  setIsLoadingLikedList(true)
+  setLikedList(await getLikedUsers(post.value!.id, 'post'))
+  setIsLoadingLikedList(false)
+}
+
 onMounted(async () => {
   const { getPostLike } = useLike()
   like.value = await getPostLike(post.value!.id)
@@ -86,7 +96,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex flex-col px-4 mb-4">
-      <span class="text-sm font-semibold"
+      <span class="text-sm font-semibold cursor-pointer" @click="handleClickLikedPost"
         >{{ post!.likeCount.toLocaleString('en-US').replace(',', '.') }} lượt thích</span
       >
       <span class="text-[10px] uppercase text-textColor-secondary" :title="fullCreatedAtComp">{{

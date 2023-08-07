@@ -8,7 +8,7 @@ import ActionsPopup from '@/components/Popup/ActionsPopup.vue'
 import { ref, computed, onBeforeMount, onMounted } from 'vue'
 import { useComment, useLike, useUser } from '@/composables'
 import { storeToRefs } from 'pinia'
-import { useCommentStore, useUserStore } from '@/store'
+import { useCommentStore, usePostStore, useUserStore } from '@/store'
 import { dateDistanceToNow, convertToFullDate, convertTagUser } from '@/helpers'
 import type { IAction, ICommentLike, IReplyLike, IUser } from '@/types'
 
@@ -34,7 +34,7 @@ const user = ref<Nullable<IUser>>(null)
 const like = ref<Nullable<ICommentLike | IReplyLike>>(null)
 const isLike = ref(false)
 const isLoadingLike = ref(false)
-const likeCountRef = ref(props.likeCount)
+const likeCount = ref(props.likeCount)
 const commentActionsPopup = ref(false)
 
 const commentActionsComp = computed(() => {
@@ -95,7 +95,7 @@ const handleLike = async () => {
     like.value = await likeReply(props.id!)
   }
 
-  likeCountRef.value! += 1
+  likeCount.value! += 1
   isLoadingLike.value = false
 }
 
@@ -111,7 +111,7 @@ const handleUnlike = async () => {
     await unlikeReply(like.value as IReplyLike)
   }
 
-  likeCountRef.value! -= 1
+  likeCount.value! -= 1
   like.value = null
   isLoadingLike.value = false
 }
@@ -126,6 +126,18 @@ const deleteItem = async () => {
     const { deleteReply } = useComment()
     await deleteReply(props.commentId!, props.id!)
   }
+}
+
+const handleClickLikeCount = async () => {
+  const { setLikedListModal, setIsLoadingLikedList, setLikedList } = usePostStore()
+  const { getLikedUsers } = useLike()
+
+  const type = props.commentId ? 'reply' : 'comment'
+
+  setLikedListModal(true)
+  setIsLoadingLikedList(true)
+  setLikedList(await getLikedUsers(props.id!, type))
+  setIsLoadingLikedList(false)
 }
 
 onBeforeMount(async () => {
@@ -163,7 +175,12 @@ onMounted(async () => {
       <div class="flex flex-wrap items-center mt-1 text-xs text-textColor-secondary">
         <span class="mr-3 cursor-pointer" :title="fullCreatedAtComp">{{ createdTimeComp }}</span>
         <template v-if="!isCaption">
-          <span class="font-semibold mr-3 cursor-pointer">{{ likeCountRef }} lượt thích</span>
+          <span
+            v-if="likeCount && likeCount > 0"
+            class="font-semibold mr-3 cursor-pointer"
+            @click="handleClickLikeCount"
+            >{{ likeCount }} lượt thích</span
+          >
           <span class="font-semibold mr-5 cursor-pointer" @click="handleReply">Trả lời</span>
           <div class="relative w-4 h-4 invisible group-hover/comment:visible cursor-pointer">
             <EllipsisIcon

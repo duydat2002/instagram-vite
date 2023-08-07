@@ -5,6 +5,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   increment,
   query,
@@ -13,9 +14,59 @@ import {
 } from 'firebase/firestore'
 import { storeToRefs } from 'pinia'
 import { useUserStore, usePostStore, useCommentStore } from '@/store'
-import type { ICommentLike, IPostLike, IReplyLike } from '@/types'
+import type { ICommentLike, IPostLike, IReplyLike, IUser } from '@/types'
+import { useUser } from '.'
 
 export const useLike = () => {
+  const getLikedUsers = async (findId: string, type: 'post' | 'comment' | 'reply') => {
+    try {
+      const { currentUser } = useUserStore()
+      const users: IUser[] = []
+
+      // Get all user liked
+      const querySnap = await getDocs(
+        query(collection(db, `${type}Likes`), where(`${type}Id`, '==', findId))
+      )
+
+      // Check currentUserFollowings commentLikes user
+      const { getUser } = useUser()
+      let hasCurrentUser = false
+      const promises = querySnap.docs.map(async (commentLikesDoc) => {
+        const userId = commentLikesDoc.data().userId
+        const user = await getUser(userId)
+
+        if (userId != currentUser?.id) {
+          const docSnap = await getDoc(doc(db, 'followers', `${currentUser?.id}-${userId}`))
+
+          if (docSnap.exists()) {
+            users.unshift({
+              ...user,
+              isCurrentUserFollowing: true
+            } as IUser)
+          } else {
+            users.push({
+              ...user,
+              isCurrentUserFollowing: false
+            } as IUser)
+          }
+        } else {
+          hasCurrentUser = true
+        }
+      })
+
+      await Promise.all(promises)
+
+      if (hasCurrentUser) {
+        users.unshift(currentUser!)
+      }
+
+      return users
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+
   // Post Likes
   const likePost = async (postId: string) => {
     try {
@@ -263,6 +314,7 @@ export const useLike = () => {
   }
 
   return {
+    getLikedUsers,
     likePost,
     unlikePost,
     getPostLike,

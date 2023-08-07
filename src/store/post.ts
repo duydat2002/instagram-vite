@@ -1,15 +1,21 @@
-import type { IPost } from '@/types'
+import type { IPost, IUser } from '@/types'
 import { defineStore } from 'pinia'
 
 interface IState {
   post: Nullable<IPost>
   userPosts: Nullable<IPost[]>
+  likedListModal: boolean
+  isLoadingLikedList: boolean
+  likedList: Nullable<IUser[]>
 }
 
 export const usePostStore = defineStore('post', {
   state: (): IState => ({
     post: null,
-    userPosts: null
+    userPosts: null,
+    likedListModal: false,
+    isLoadingLikedList: false,
+    likedList: null
   }),
   actions: {
     setPost(post: Nullable<IPost>) {
@@ -29,6 +35,15 @@ export const usePostStore = defineStore('post', {
     },
     setUserPosts(posts: Nullable<IPost[]>) {
       this.userPosts = posts
+    },
+    setLikedListModal(value: boolean) {
+      this.likedListModal = value
+    },
+    setLikedList(value: Nullable<IUser[]>) {
+      this.likedList = value
+    },
+    setIsLoadingLikedList(value: boolean) {
+      this.isLoadingLikedList = value
     }
   }
 })

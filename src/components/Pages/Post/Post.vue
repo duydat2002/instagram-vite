@@ -6,6 +6,7 @@ import PostSwiper from './PostSwiper.vue'
 import PostHeader from './PostHeader.vue'
 import PostComments from './PostComments.vue'
 import PostActions from './PostActions.vue'
+import UsersWhoLikedModel from '@/components/Modal/UsersWhoLikedModel.vue'
 
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -13,8 +14,8 @@ import { useUserStore, usePostStore, useCommentStore } from '@/store'
 import { useComment } from '@/composables'
 import type { ICommentPost, IReply } from '@/types'
 
-const { user, currentUser } = storeToRefs(useUserStore())
-const { post } = storeToRefs(usePostStore())
+const { currentUser } = storeToRefs(useUserStore())
+const { post, likedListModal } = storeToRefs(usePostStore())
 const { comment, commentRef, replyTo } = storeToRefs(useCommentStore())
 const emojiPickerActive = ref(false)
 const loadingComment = ref(false)
@@ -147,5 +148,6 @@ const handleComment = async () => {
         </div>
       </div>
     </div>
+    <UsersWhoLikedModel v-if="likedListModal" />
   </div>
 </template>
